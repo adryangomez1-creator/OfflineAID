@@ -1,0 +1,52 @@
+h3 {
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Tarjeta individual de alerta */
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--accent-teal);
+  transform: translateY(-2px);
+}
+
+.card-title {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.card-text {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Badges de nivel o estado */
+.badge {
+  background-color: rgba(217, 37, 70, 0.2) !important;
+  color: var(--accent-red) !important;
+  border: 1px solid var(--accent-red);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Botón actualizar */
+.btn-outline-primary {
+  color: var(--accent-teal);
+  border-color: var(--accent-teal);
+  border-radius: 8px;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--accent-teal);
+  color: #0b1320;
+}

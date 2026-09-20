@@ -1,0 +1,55 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">Listado de Emergencias</h3>
+  <button class="btn btn-outline-primary btn-sm" (click)="cargarEmergencias()">
+    Actualizar
+  </button>
+</div>
+
+<!-- Estado de carga -->
+@if (cargando) {
+  <div class="alert alert-info">
+    Cargando emergencias...
+  </div>
+}
+
+<!-- Mensaje de error -->
+@if (error) {
+  <div class="alert alert-danger">
+    {{ error }}
+  </div>
+}
+
+<!-- Sin registros -->
+@if (!cargando && emergencias.length === 0 && !error) {
+  <div class="alert alert-warning">
+    No hay emergencias registradas actualmente.
+  </div>
+}
+
+<!-- Lista de emergencias -->
+@if (!cargando && emergencias.length > 0) {
+  <div class="row">
+@for (e of emergencias; track $index) {
+          <div class="col-12 mb-3">
+        <div class="card h-100 shadow-sm border-start border-danger border-4">
+          <div class="card-body">
+            <h5 class="card-title text-danger mb-2">{{ e.titulo }}</h5>
+            <p class="card-text mb-2">{{ e.descripcion }}</p>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-muted">
+                Estado: <span class="badge bg-secondary">{{ e.estado || 'PENDIENTE' }}</span>
+              </small>
+
+              @if (e.direccion) {
+                <small class="text-muted">
+                  📍 {{ e.direccion }}
+                </small>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}

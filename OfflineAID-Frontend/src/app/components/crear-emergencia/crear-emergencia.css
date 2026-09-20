@@ -43,3 +43,43 @@
   box-shadow: 0 0 15px rgba(230, 34, 73, 0.4);
   transform: translateY(-1px);
 }
+
+.btn-location {
+  background: transparent;
+  border: 1px solid var(--accent-blue);
+  color: var(--accent-blue);
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.btn-location:hover { background: rgba(56, 189, 248, 0.12); }
+
+.prioridad, .ubicacion small, .mb-3 small { color: var(--text-secondary); }
+.prioridad { display: block; margin-top: .45rem; font-weight: 700; letter-spacing: .05em; }
+.prioridad.critica { color: var(--accent-red); }
+
+.alert-offline {
+  color: #c7fff7;
+  background: rgba(13, 148, 136, 0.2);
+  border: 1px solid var(--connection-green);
+}
+
+.input-archivo { display: none; }
+.btn-archivo {
+  background: transparent;
+  border: 1px solid var(--text-secondary);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+.btn-archivo:hover { background: rgba(148, 163, 184, .12); }
+
+.input-archivo { display: none; }
+.btn-archivo {
+  background: transparent;
+  border: 1px solid var(--text-secondary);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+.btn-archivo:hover { background: rgba(148, 163, 184, .12); }

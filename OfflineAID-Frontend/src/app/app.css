@@ -1,0 +1,17 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-card);
+  padding-block: 1rem;
+}
+
+.navbar-brand { color: var(--accent-red); font-size: 1.35rem; font-weight: 900; letter-spacing: .08em; }
+.navbar-brand span { color: var(--text-primary); }
+.estado-conexion { color: var(--connection-green); font-size: .75rem; font-weight: 800; letter-spacing: .08em; }
+.estado-conexion.offline { color: var(--alert-yellow); }
+.punto-conexion { display: inline-block; width: .55rem; height: .55rem; border-radius: 50%; background: currentColor; margin-right: .35rem; }
+.aviso-offline, .aviso-sync { margin: 0 1.5rem 1rem; padding: .7rem 1rem; border-radius: 8px; font-size: .9rem; }
+.aviso-offline { color: #c7fff7; background: rgba(13, 148, 136, .2); border: 1px solid var(--connection-green); }
+.aviso-sync { color: #dbeafe; background: rgba(56, 189, 248, .15); border: 1px solid var(--accent-blue); }

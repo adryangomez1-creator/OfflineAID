@@ -15,7 +15,7 @@ h3 {
 }
 
 .card:hover {
-  border-color: var(--accent-teal);
+  border-color: var(--accent-blue);
   transform: translateY(-2px);
 }
 
@@ -41,12 +41,20 @@ h3 {
 
 /* Botón actualizar */
 .btn-outline-primary {
-  color: var(--accent-teal);
-  border-color: var(--accent-teal);
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
   border-radius: 8px;
 }
 
 .btn-outline-primary:hover {
-  background-color: var(--accent-teal);
+  background-color: var(--accent-blue);
   color: #0b1320;
 }
+
+.sync-badge, .tipo {
+  color: var(--accent-blue);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+.sync-badge.error { color: var(--accent-red); }

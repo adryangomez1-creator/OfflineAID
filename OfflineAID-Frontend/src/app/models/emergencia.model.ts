@@ -12,4 +12,10 @@ export interface Emergencia {
   estado?: EstadoEmergencia;
   fecha_creacion?: Date | string;
   fecha_actualizacion?: Date | string;
+  tipo_nombre?: string;
+  nivel_prioridad?: 'CRITICA' | 'ALTA' | 'MEDIA' | 'BAJA';
+  evidencias?: string[];
+  id_local?: string;
+  estado_sync?: 'PENDIENTE' | 'SINCRONIZADO' | 'ERROR';
+  error_sync?: string;
 }

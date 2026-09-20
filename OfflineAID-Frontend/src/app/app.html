@@ -1,8 +1,20 @@
-<nav class="navbar navbar-dark bg-dark mb-4 border-bottom border-secondary px-3">
-  <span class="navbar-brand mb-0 h1 text-uppercase fw-bold text-danger">
-    Offline<span class="text-white">AID</span>
+<nav class="navbar mb-4 px-3">
+  <span class="navbar-brand text-uppercase">
+    Offline<span>AID</span>
   </span>
+  <div class="estado-conexion" [class.offline]="!enLinea">
+    <span class="punto-conexion"></span>
+    {{ enLinea ? 'EN LÍNEA' : 'MODO OFFLINE' }}
+  </div>
 </nav>
+
+@if (!enLinea) {
+  <div class="aviso-offline">Sin conexión: tus reportes y ubicación se guardarán en este dispositivo.</div>
+}
+
+@if (sincronizando) {
+  <div class="aviso-sync">Sincronizando reportes pendientes…</div>
+}
 
 <div class="container-fluid px-4">
   <div class="row">

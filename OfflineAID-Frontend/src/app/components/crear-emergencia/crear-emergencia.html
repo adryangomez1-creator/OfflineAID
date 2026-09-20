@@ -5,8 +5,14 @@
   <div class="card-body">
 
     @if (mensajeExito) {
-      <div class="alert alert-success">
-        ¡Emergencia reportada exitosamente!
+      <div class="alert alert-success" role="status">
+        Emergencia guardada con éxito.
+      </div>
+    }
+
+    @if (mensajeOffline) {
+      <div class="alert alert-offline" role="status">
+        {{ mensajeOffline }}
       </div>
     }
 
@@ -17,6 +23,17 @@
     }
 
     <form [formGroup]="formEmergencia" (ngSubmit)="guardar()">
+
+      <div class="mb-3">
+        <label class="form-label" for="tipo">Tipo de emergencia</label>
+        <select id="tipo" class="form-select" formControlName="id_tipo">
+          <option [ngValue]="null" disabled>Selecciona una categoría</option>
+          @for (tipo of tipos; track tipo.id) {
+            <option [ngValue]="tipo.id">{{ tipo.nombre }} - {{ tipo.prioridad }}</option>
+          }
+        </select>
+        <small class="prioridad" [class.critica]="prioridadActual() === 'CRITICA'">Prioridad: {{ prioridadActual() }}</small>
+      </div>
 
       <!-- Título -->
       <div class="mb-3">
@@ -32,6 +49,18 @@
             El título es obligatorio y debe tener al menos 5 caracteres.
           </small>
         }
+      </div>
+
+      <div class="mb-3 ubicacion">
+        <button type="button" class="btn btn-location" (click)="capturarUbicacion()">⌖ Guardar mi ubicación</button>
+        @if (ubicacionMensaje) { <small class="d-block mt-2">{{ ubicacionMensaje }}</small> }
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="evidencias">Fotos de evidencia (opcional, máximo 3)</label>
+        <input id="evidencias" #inputEvidencias type="file" class="input-archivo" accept="image/*" multiple (change)="seleccionarEvidencias($event)" />
+        <button type="button" class="btn btn-archivo" (click)="inputEvidencias.click()">📎 Seleccionar fotos</button>
+        @if (archivos.length) { <small class="d-block mt-1">{{ archivos.length }} foto(s) seleccionada(s).</small> }
       </div>
 
       <!-- Descripción -->
@@ -62,8 +91,8 @@
       </div>
 
       <!-- Botón Enviar -->
-      <button type="submit" class="btn btn-danger w-100" [disabled]="cargando">
-        {{ cargando ? 'Enviando reporte...' : 'Reportar Emergencia' }}
+      <button type="submit" class="btn btn-danger w-100" [disabled]="formEmergencia.invalid || cargando">
+        {{ cargando ? 'Enviando reporte...' : formEmergencia.invalid ? ' Completa el reporte para enviarlo' : 'Reportar Emergencia' }}
       </button>
     </form>
 

@@ -1,0 +1,106 @@
+<nav class="navbar px-3">
+  <span class="navbar-brand text-uppercase">
+    Offline<span>AID</span> <small style="font-size: 0.65rem; color: #ef4444; margin-left: 6px; font-weight: 600;">[PANEL INSTITUCIONAL]</small>
+  </span>
+  <div class="estado-conexion">
+    <span class="punto-conexion"></span>
+    SISTEMA ACTIVO
+  </div>
+  <div class="usuario-menu">
+    <span>Institución / Admin</span>
+    <button type="button" (click)="cerrarSesion()">Salir</button>
+  </div>
+</nav>
+
+<main class="dashboard">
+  <section class="bienvenida">
+    <p>PANEL DE CONTROL</p>
+    <h1>Gestión de Reportes</h1>
+  </section>
+
+  <div class="panel-operador-layout">
+    <!-- Columna Izquierda: Lista de Reportes -->
+    <section class="alertas lista-reportes-box">
+      <div class="alertas-titulo">
+        <p>REPORTES DE EMERGENCIA ACTIVOS</p>
+        <span style="cursor: pointer; color: #f87171;" (click)="cargarEmergencias()">ACTUALIZAR</span>
+      </div>
+
+      <div *ngIf="cargando" class="texto-cargando">Cargando reportes...</div>
+      <div *ngIf="!cargando && listaEmergencias.length === 0" class="texto-cargando">No hay reportes registrados en este momento.</div>
+
+      <div *ngFor="let item of listaEmergencias" 
+           (click)="seleccionarEmergencia(item)"
+           class="reporte-item-card"
+           [class.activo]="emergenciaSeleccionada?.id === item.id || emergenciaSeleccionada?.id_local === item.id_local">
+        
+        <div class="reporte-item-header">
+          <h3>{{ item.titulo }}</h3>
+          <span class="badge-estado" [ngClass]="(item.estado || 'PENDIENTE').toLowerCase()">
+            {{ item.estado || 'PENDIENTE' }}
+          </span>
+        </div>
+        
+        <p class="reporte-item-desc">{{ item.descripcion }}</p>
+        
+        <div class="reporte-item-footer">
+          <span>📍 {{ item.direccion || 'Ubicación GPS registrada' }}</span>
+          <span>{{ item.fecha || 'Reciente' }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Columna Derecha: Detalle y Gestión -->
+    <section class="detalle-reporte-box">
+      <div *ngIf="emergenciaSeleccionada; else sinSeleccion">
+        <div class="detalle-titulo-box">
+          <h2>Detalle del Reporte</h2>
+          <span class="detalle-id">ID: {{ emergenciaSeleccionada.id || emergenciaSeleccionada.id_local }}</span>
+        </div>
+        
+        <div class="detalle-contenido">
+          <div class="campo-grupo">
+            <label>Título:</label>
+            <p class="val-titulo">{{ emergenciaSeleccionada.titulo }}</p>
+          </div>
+          
+          <div class="campo-grupo">
+            <label>Descripción:</label>
+            <p class="val-desc">{{ emergenciaSeleccionada.descripcion }}</p>
+          </div>
+
+          <div class="campo-grupo">
+            <label>Ubicación exacta:</label>
+            <p class="val-dir">📍 {{ emergenciaSeleccionada.direccion || 'No especificada' }}</p>
+            <p class="val-coords" *ngIf="emergenciaSeleccionada.latitud">Lat: {{ emergenciaSeleccionada.latitud }} | Lng: {{ emergenciaSeleccionada.longitud }}</p>
+          </div>
+        </div>
+
+        <!-- Evidencia Fotográfica -->
+        <div class="evidencia-box" *ngIf="emergenciaSeleccionada.imagen || emergenciaSeleccionada.foto">
+          <label>Evidencia Fotográfica:</label>
+          <div class="imagen-contenedor">
+            <img [src]="emergenciaSeleccionada.imagen || emergenciaSeleccionada.foto" alt="Evidencia de emergencia">
+          </div>
+        </div>
+
+        <!-- Botones para Cambiar Estado -->
+        <div class="acciones-estado-box">
+          <label>Modificar Estado de la Emergencia:</label>
+          <div class="grid-botones-estado">
+            <button class="btn-est pendiente" (click)="actualizarEstado('PENDIENTE')">Pendiente</button>
+            <button class="btn-est proceso" (click)="actualizarEstado('EN_PROCESO')">En Proceso</button>
+<button class="btn-est resuelto" (click)="actualizarEstado('ATENDIDA')">Resuelto</button>          </div>
+        </div>
+      </div>
+
+      <ng-template #sinSeleccion>
+        <div class="vacio-box">
+          <span class="vacio-icono">🛡️</span>
+          <p class="vacio-titulo">Selecciona un reporte de la lista</p>
+          <p class="vacio-sub">Podrás inspeccionar sus detalles, ver la evidencia fotográfica adjunta y cambiar su estatus institucional.</p>
+        </div>
+      </ng-template>
+    </section>
+  </div>
+</main>

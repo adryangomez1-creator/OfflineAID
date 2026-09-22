@@ -36,3 +36,29 @@ body {
   border-color: var(--accent-blue) !important;
   box-shadow: 0 0 0 0.2rem rgba(56, 189, 248, 0.2) !important;
 }
+/* Estilos globales para los estados de las emergencias en toda la app */
+.badge-estado {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+}
+
+.badge-estado.pendiente {
+  background: rgba(127, 29, 29, 0.3);
+  color: #fca5a5;
+  border: 1px solid #991b1b;
+}
+
+.badge-estado.en_proceso {
+  background: rgba(113, 63, 18, 0.3);
+  color: #fde047;
+  border: 1px solid #854d0e;
+}
+
+.badge-estado.atendida, .badge-estado.resuelto {
+  background: rgba(20, 83, 45, 0.3);
+  color: #86efac;
+  border: 1px solid #166534;
+}

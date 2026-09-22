@@ -40,9 +40,26 @@ export class AuthComponent {
     this.cargando = true;
     this.error = '';
     const { correo, password } = this.loginForm.getRawValue();
-    this.auth.iniciarSesion(correo, password).pipe(timeout(10_000), finalize(() => this.cargando = false)).subscribe({
-      next: () => undefined,
-      error: ({ error }) => { this.error = error?.error ?? 'No fue posible iniciar sesión. Verifica que el backend esté disponible.'; }
+
+    this.auth.iniciarSesion(correo, password).pipe
+    (timeout(10_000),
+     finalize(() => this.cargando = false))
+     .subscribe({
+      next: (res: any) => {
+      const usuario = res?.usuario;
+      if (usuario) {
+        localStorage.setItem('usuario', JSON.stringify(usuario));
+        if (usuario.rol === 'ADMIN'|| usuario.rol === 'OPERADOR') {
+          console.log("acceso concedido como ADMIN/OPERADOR");
+
+      } else {
+        console.log("acceso concedido como CIUDADANO");
+      }
+      }
+      },
+      error:({ error }) => {
+        this.error = error?.error ?? 'No fue posible iniciar sesión. Verifica que el backend esté disponible.';
+      }
     });
   }
 

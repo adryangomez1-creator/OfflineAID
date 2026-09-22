@@ -24,4 +24,7 @@ router.patch('/emergencias/:id/ubicacion', emergenciasController.actualizarUbica
 // Cambiar estado del ciclo de vida de la emergencia
 router.patch('/emergencias/:id/estado', emergenciasController.cambiarEstado);
 
+// <-- CORREGIDO AQUÍ: Agregamos '/emergencias' al inicio -->
+router.put('/emergencias/:id/estado', emergenciasController.cambiarEstado);
+
 export default router;

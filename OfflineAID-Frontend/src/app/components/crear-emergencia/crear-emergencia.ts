@@ -1,17 +1,10 @@
 import { CommonModule } from '@angular/common';
-<<<<<<< HEAD
-import { Component, inject, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EmergenciaService } from '../../services/emergencia.service';
-
-=======
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EmergenciaService } from '../../services/emergencia.service';
 import { AuthService } from '../../services/auth.service';
 import { UbicacionService } from '../../services/ubicacion.service';
 import { timeout } from 'rxjs';
->>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
 
 @Component({
   selector: 'app-crear-emergencia',
@@ -23,12 +16,8 @@ import { timeout } from 'rxjs';
 export class CrearEmergenciaComponent {
   private fb = inject(FormBuilder);
   private emergenciaService = inject(EmergenciaService);
-<<<<<<< HEAD
-  private cdr = inject(ChangeDetectorRef);
-=======
   private auth = inject(AuthService);
   private ubicacion = inject(UbicacionService);
->>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
 
   cargando = false;
   mensajeExito = false;
@@ -53,11 +42,7 @@ export class CrearEmergenciaComponent {
     titulo: ['', [Validators.required, Validators.minLength(5)]],
     descripcion: ['', [Validators.required, Validators.minLength(10)]],
     id_tipo: [null, [Validators.required]],
-<<<<<<< HEAD
-    id_usuario: [1, [Validators.required]], // ID de usuario temporal para pruebas
-=======
     id_usuario: [this.auth.usuarioActual()?.id_usuario ?? null, [Validators.required]],
->>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
     direccion: [''],
     latitud: [null],
     longitud: [null]
@@ -75,21 +60,11 @@ export class CrearEmergenciaComponent {
     this.errorMensaje = '';
 
     this.leerEvidencias().then(evidencias => this.emergenciaService.crearEmergencia({ ...this.formEmergencia.value, evidencias }).subscribe({
-<<<<<<< HEAD
       next: ({ offline }) => {
         this.cargando = false;
         this.mensajeExito = true;
         this.mensajeOffline = offline ? 'Reporte guardado en este dispositivo. Se enviará al recuperar conexión.' : '';
-        this.formEmergencia.reset({ id_usuario: 1 });
-=======
-      next: ({ offline, direccion }) => {
-        this.cargando = false;
-        this.mensajeExito = true;
-        this.mensajeOffline = offline
-          ? 'Reporte guardado en este dispositivo. Se enviará al recuperar conexión.'
-          : direccion ? `Reporte guardado. Dirección registrada: ${direccion}` : '';
         this.formEmergencia.reset({ id_usuario: this.auth.usuarioActual()?.id_usuario ?? null });
->>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
         this.archivos = [];
         this.ubicacionMensaje = '';
       },
@@ -108,40 +83,6 @@ export class CrearEmergenciaComponent {
     }
     this.ubicacionMensaje = 'Obteniendo ubicación…';
     navigator.geolocation.getCurrentPosition(
-<<<<<<< HEAD
-      async posicion => {
-        const { latitude, longitude } = posicion.coords;
-        this.formEmergencia.patchValue({ latitud: latitude, longitud: longitude });
-        this.ubicacionMensaje = `📍 Coordenadas: ${latitude.toFixed(5)}, ${longitude.toFixed(5)} — Buscando dirección…`;
-        this.cdr.detectChanges();
-
-        // Llamada a OpenStreetMap Nominatim para geocodificación inversa
-        try {
-          const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`;
-          const respuesta = await fetch(url, {
-            headers: {
-              'Accept-Language': 'es',
-              'User-Agent': 'OfflineAid-EmergencySystem/1.0'
-            }
-          });
-          if (respuesta.ok) {
-            const datos = await respuesta.json();
-            if (datos?.display_name) {
-              const direccionTexto = String(datos.display_name).trim().slice(0, 255);
-              this.formEmergencia.patchValue({ direccion: direccionTexto });
-              this.ubicacionMensaje = `✅ Ubicación guardada`;
-            } else {
-              this.ubicacionMensaje = `✅ Coordenadas guardadas (dirección no disponible)`;
-            }
-          } else {
-            this.ubicacionMensaje = `✅ Coordenadas guardadas (sin conexión a mapa)`;
-          }
-        } catch {
-          // Sin internet o error de Nominatim — las coordenadas igual se guardaron
-          this.ubicacionMensaje = `✅ Coordenadas guardadas (dirección no disponible offline)`;
-        }
-        this.cdr.detectChanges();
-=======
       posicion => {
         const { latitude, longitude } = posicion.coords;
         this.formEmergencia.patchValue({ latitud: latitude, longitud: longitude });
@@ -157,7 +98,6 @@ export class CrearEmergenciaComponent {
           },
           error: () => this.ubicacionMensaje = 'Ubicación capturada. La dirección se resolverá al enviar el reporte.'
         });
->>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
       },
       () => this.ubicacionMensaje = 'No fue posible obtener la ubicación. Revisa los permisos del navegador.',
       { enableHighAccuracy: true, timeout: 10_000 }

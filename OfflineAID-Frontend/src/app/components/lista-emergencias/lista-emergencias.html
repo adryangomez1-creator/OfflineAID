@@ -1,100 +1,46 @@
-<<<<<<< HEAD
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h3 class="mb-0">Listado de Emergencias</h3>
-  <button class="btn btn-outline-primary btn-sm" (click)="sincronizar()">
-    Actualizar
-  </button>
-</div>
+<button class="actualizar" type="button" (click)="sincronizar()">↻ Actualizar</button>
 
-<!-- Estado de carga -->
-@if (cargando) {
-  <div class="alert alert-info">
-=======
-<button class="actualizar" type="button" (click)="cargarEmergencias()">↻ Actualizar</button>
-
-<!-- Estado de carga -->
 @if (cargando) {
   <div class="estado-lista">
->>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
     Cargando emergencias...
   </div>
 }
 
-<!-- Mensaje de error -->
 @if (error) {
-<<<<<<< HEAD
-  <div class="alert alert-danger">
-=======
   <div class="estado-lista error">
->>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
     {{ error }}
   </div>
 }
 
-<!-- Sin registros -->
 @if (!cargando && emergencias.length === 0 && !error) {
-<<<<<<< HEAD
-  <div class="alert alert-warning">
-=======
   <div class="estado-lista">
->>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
     No hay emergencias registradas actualmente.
   </div>
 }
 
-<!-- Lista de emergencias -->
 @if (!cargando && emergencias.length > 0) {
-<<<<<<< HEAD
-  <div class="row">
-@for (e of emergencias; track e.id_local || e.id_emergencia || $index) {
-          <div class="col-12 mb-3">
-        <div class="card h-100 shadow-sm border-start border-danger border-4">
-          <div class="card-body">
-            <div class="d-flex justify-content-between gap-2">
-              <h5 class="card-title text-danger mb-2">{{ e.titulo }}</h5>
-              @if (e.estado_sync === 'PENDIENTE') { <span class="sync-badge">⏳ Pendiente de envío</span> }
-              @if (e.estado_sync === 'ERROR') { <span class="sync-badge error">Error al sincronizar</span> }
-            </div>
-            <p class="card-text mb-2">{{ e.descripcion }}</p>
-
-            <div class="d-flex justify-content-between align-items-center">
-              <small class="text-light">
-=======
-@for (e of emergencias; track e.id_local || e.id_emergencia || $index) {
-        <article class="alerta-item">
-            <div class="alerta-cuerpo">
-              <h5>{{ e.titulo }}</h5>
-              @if (e.estado_sync === 'PENDIENTE') { <span class="sync-badge">⏳ Pendiente de envío</span> }
-              @if (e.estado_sync === 'ERROR') { <span class="sync-badge error">Error al sincronizar</span> }
-            </div>
-            <p>{{ e.descripcion }}</p>
-
-            <div class="detalle">
-              <small>
->>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
-                Estado: <span class="badge bg-secondary">{{ e.estado || 'PENDIENTE' }}</span>
-              </small>
-
-              @if (e.tipo_nombre || e.nivel_prioridad) { <small class="tipo">{{ e.tipo_nombre }} {{ e.nivel_prioridad ? '· ' + e.nivel_prioridad : '' }}</small> }
-
-              @if (e.direccion) {
-<<<<<<< HEAD
-                <small class="text-light">
-=======
-                <small>
->>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
-                  📍 {{ e.direccion }}
-                </small>
-              }
-            </div>
-<<<<<<< HEAD
-          </div>
-        </div>
+  @for (e of emergencias; track e.id_local || e.id_emergencia || $index) {
+    <article class="alerta-item">
+      <div class="alerta-cuerpo">
+        <h5>{{ e.titulo }}</h5>
+        @if (e.estado_sync === 'PENDIENTE') { <span class="sync-badge">⏳ Pendiente de envío</span> }
+        @if (e.estado_sync === 'ERROR') { <span class="sync-badge error">Error al sincronizar</span> }
       </div>
-    }
-  </div>
-=======
-        </article>
-    }
->>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
+      <p>{{ e.descripcion }}</p>
+
+      <div class="detalle">
+        <small>
+          Estado: <span class="badge bg-secondary">{{ e.estado || 'PENDIENTE' }}</span>
+        </small>
+
+        @if (e.tipo_nombre || e.nivel_prioridad) { <small class="tipo">{{ e.tipo_nombre }} {{ e.nivel_prioridad ? '· ' + e.nivel_prioridad : '' }}</small> }
+
+        @if (e.direccion) {
+          <small>
+            📍 {{ e.direccion }}
+          </small>
+        }
+      </div>
+    </article>
+  }
 }

@@ -43,19 +43,15 @@ export class EmergenciaService {
   }
 
   reportesCombinados(): Observable<Emergencia[]> {
-    const idUsuario = this.auth.usuarioActual()?.id_usuario;
-    const remotos$ = idUsuario
-      ? this.http.get<Emergencia[]>(`${this.apiUrl}/usuario/${idUsuario}`)
-      : of([] as Emergencia[]);
-    const remotosSeguros$ = remotos$.pipe(
+    const remotos$ = this.http.get<Emergencia[]>(this.apiUrl).pipe(
       catchError(() => of([] as Emergencia[]))
     );
     const locales$ = from(this.almacenamiento.obtenerTodos()).pipe(
       catchError(() => of([] as Emergencia[]))
     );
 
-    return combineLatest([locales$, remotosSeguros$]).pipe(
-      map(([locales, remotos]) => [...locales.filter(reporte => reporte.id_usuario === idUsuario), ...remotos])
+    return combineLatest([locales$, remotos$]).pipe(
+      map(([locales, remotos]) => [...locales, ...remotos])
     );
   }
 
@@ -84,6 +80,14 @@ export class EmergenciaService {
           catchError(() => of(0))
         );
       })
+    );
+  }
+
+  // Método requerido por el panel de operador para cambiar estados
+// Actualiza este método en tu servicio frontend
+  actualizarEstado(id: number | string, estado: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}/estado`, { estado }).pipe(
+      tap(() => this.cambios.next())
     );
   }
 

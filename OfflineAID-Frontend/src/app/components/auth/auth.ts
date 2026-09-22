@@ -43,7 +43,7 @@ export class AuthComponent {
     this.error = '';
     const { correo, password } = this.loginForm.getRawValue();
     this.auth.iniciarSesion(correo, password).pipe(timeout(10_000), finalize(() => this.cargando = false)).subscribe({
-      next: ({ usuario }) => this.router.navigateByUrl(usuario.rol === 'ADMIN' ? '/admin' : '/usuario'),
+      next: () => undefined,
       error: ({ error }) => { this.error = error?.error ?? 'No fue posible iniciar sesión. Verifica que el backend esté disponible.'; }
     });
   }

@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { finalize, timeout } from 'rxjs';
 import { Subscription, skip } from 'rxjs';
 import { Emergencia } from '../../models/emergencia.model';
@@ -7,7 +8,7 @@ import { EmergenciaService } from '../../services/emergencia.service';
 @Component({
   selector: 'app-lista-emergencias',
   standalone: true,
-  imports: [], // Con la sintaxis @if y @for ya no dependes de CommonModule aquí
+  imports: [CommonModule], // <-- Agregado aquí
   templateUrl: './lista-emergencias.html',
   styleUrl: './lista-emergencias.css'
 })
@@ -65,4 +66,3 @@ export class ListaEmergenciasComponent implements OnInit, OnDestroy {
     });
   }
 }
-

@@ -30,7 +30,9 @@
 
       <div class="detalle">
         <small>
-          Estado: <span class="badge bg-secondary">{{ e.estado || 'PENDIENTE' }}</span>
+           <span class="badge-estado" [ngClass]="(e.estado || 'PENDIENTE').toLowerCase()">
+  {{ e.estado || 'PENDIENTE' }}
+</span>
         </small>
 
         @if (e.tipo_nombre || e.nivel_prioridad) { <small class="tipo">{{ e.tipo_nombre }} {{ e.nivel_prioridad ? '· ' + e.nivel_prioridad : '' }}</small> }

@@ -1,5 +1,5 @@
 import { Component, effect, isDevMode, OnDestroy, OnInit, inject } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, timeout } from 'rxjs';
 import { CrearEmergenciaComponent } from './components/crear-emergencia/crear-emergencia';
 import { NoticiasComponent } from './components/noticias/noticias';
 import { ListaEmergenciasComponent } from './components/lista-emergencias/lista-emergencias';
@@ -8,15 +8,14 @@ import { EmergenciaService } from './services/emergencia.service';
 import { AuthService } from './services/auth.service';
 import { UbicacionService } from './services/ubicacion.service';
 import { timeout } from 'rxjs';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CrearEmergenciaComponent,
-    NoticiasComponent,
-    ListaEmergenciasComponent
+    ListaEmergenciasComponent,
+    AuthComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -82,5 +81,11 @@ export class AppComponent implements OnInit, OnDestroy {
     if (!this.enLinea || this.sincronizando) return;
     this.sincronizando = true;
     this.emergenciaService.sincronizarPendientes().subscribe({ complete: () => this.sincronizando = false });
+  }
+
+  get esPersonalInstitucion(): boolean {
+    const u = this.usuario();
+    if (!u) return false;
+    return u.rol === 'ADMIN' || u.rol === 'OPERATOR' || u.rol === 'OPERADOR';
   }
 }

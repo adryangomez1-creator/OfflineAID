@@ -1,0 +1,43 @@
+<main class="auth-page">
+  <section class="auth-card" aria-label="Acceso a OfflineAID">
+    <div class="signal">⌁</div>
+    <div class="brand"><span>Offline</span>AID</div>
+    <p class="subtitle">SISTEMA DE GESTIÓN DE EMERGENCIAS</p>
+    <div class="form-title">{{ modo === 'login' ? 'INICIAR SESIÓN' : 'CREAR CUENTA' }}</div>
+
+    @if (error) { <div class="auth-error" role="alert">{{ error }}</div> }
+
+    @if (modo === 'login') {
+      <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()">
+        <label for="correo-login">Correo electrónico</label>
+        <div class="input-icon"><span>✉</span><input id="correo-login" type="email" formControlName="correo" placeholder="usuario@offlineaid.org" autocomplete="email" /></div>
+        @if (loginForm.controls.correo.touched && loginForm.controls.correo.invalid) { <small>Ingresa un correo válido.</small> }
+        <label for="password-login">Contraseña</label>
+        <div class="input-icon"><span>♙</span><input id="password-login" type="password" formControlName="password" placeholder="••••••••••" autocomplete="current-password" /></div>
+        @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) { <small>La contraseña es obligatoria.</small> }
+        <button class="primary" type="submit" [disabled]="cargando">{{ cargando ? 'Ingresando…' : 'INGRESAR AL SISTEMA' }}</button>
+        <p class="switch">¿No tienes cuenta? <button type="button" (click)="cambiarModo('registro')">Crear cuenta</button></p>
+      </form>
+    } @else {
+      <form [formGroup]="registroForm" (ngSubmit)="registrar()">
+        <div class="field-pair">
+          <div><label for="nombre">Nombre</label><input id="nombre" formControlName="nombre" autocomplete="given-name" /></div>
+          <div><label for="apellido">Apellido</label><input id="apellido" formControlName="apellido" autocomplete="family-name" /></div>
+        </div>
+        @if ((registroForm.controls.nombre.touched && registroForm.controls.nombre.invalid) || (registroForm.controls.apellido.touched && registroForm.controls.apellido.invalid)) { <small>Nombre y apellido son obligatorios.</small> }
+        <label for="telefono">Teléfono <span>(opcional)</span></label>
+        <input id="telefono" type="tel" formControlName="telefono" placeholder="Ej. 5555-1234" autocomplete="tel" />
+        <label for="correo-registro">Correo electrónico</label>
+        <input id="correo-registro" type="email" formControlName="correo" placeholder="nombre@correo.com" autocomplete="email" />
+        @if (registroForm.controls.correo.touched && registroForm.controls.correo.invalid) { <small>Ingresa un correo válido.</small> }
+        <label for="password-registro">Contraseña</label>
+        <input id="password-registro" type="password" formControlName="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+        <label for="confirmar-password">Confirmar contraseña</label>
+        <input id="confirmar-password" type="password" formControlName="confirmarPassword" placeholder="Repite tu contraseña" autocomplete="new-password" />
+        @if (registroForm.controls.password.touched && registroForm.controls.password.invalid) { <small>La contraseña debe tener al menos 6 caracteres.</small> }
+        <button class="primary" type="submit" [disabled]="cargando">{{ cargando ? 'Creando cuenta…' : 'CREAR CUENTA' }}</button>
+        <p class="switch">¿Ya tienes cuenta? <button type="button" (click)="cambiarModo('login')">Inicia sesión</button></p>
+      </form>
+    }
+  </section>
+</main>

@@ -5,6 +5,8 @@ import emergenciasRoutes from './emergencias.routes.js';
 import asignacionesRoutes from './asignaciones.routes.js';
 import notificacionesRoutes from './notificaciones.routes.js';
 import estadisticasRoutes from './estadisticas.routes.js';
+import authRoutes from './auth.routes.js';
+import ubicacionRoutes from './ubicacion.routes.js';
 
 const router: ExpressRouter = Router();
 
@@ -17,6 +19,8 @@ router.use(emergenciasRoutes);
 router.use(asignacionesRoutes);
 router.use(notificacionesRoutes);
 router.use(estadisticasRoutes);
+router.use(authRoutes);
+router.use(ubicacionRoutes);
 
 // =========================================================================
 // FASE 2: CRUDS BÁSICOS POR ENTIDAD

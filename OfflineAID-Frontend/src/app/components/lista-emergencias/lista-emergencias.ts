@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { finalize, timeout } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { Emergencia } from '../../models/emergencia.model';
 import { EmergenciaService } from '../../services/emergencia.service';
@@ -12,6 +13,7 @@ import { EmergenciaService } from '../../services/emergencia.service';
 })
 export class ListaEmergenciasComponent implements OnInit, OnDestroy {
   private emergenciaService = inject(EmergenciaService);
+  private cdr = inject(ChangeDetectorRef);
 
   emergencias: Emergencia[] = [];
   cargando: boolean = true;
@@ -29,15 +31,16 @@ export class ListaEmergenciasComponent implements OnInit, OnDestroy {
     this.cargando = true;
     this.error = null;
 
-    this.emergenciaService.reportesCombinados().subscribe({
+    this.emergenciaService.reportesCombinados().pipe(
+      timeout(5_000),
+      finalize(() => { this.cargando = false; this.cdr.markForCheck(); })
+    ).subscribe({
       next: (data) => {
         this.emergencias = data;
-        this.cargando = false;
       },
       error: (err) => {
         console.error('Error al obtener emergencias:', err);
         this.error = 'No se pudieron cargar las emergencias guardadas.';
-        this.cargando = false;
       }
     });
   }

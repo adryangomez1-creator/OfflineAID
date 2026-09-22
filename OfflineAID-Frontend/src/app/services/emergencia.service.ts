@@ -3,12 +3,14 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, from, map, of, switchMap, tap, throwError, timeout } from 'rxjs';
 import { Emergencia } from '../models/emergencia.model';
 import { AlmacenamientoOfflineService } from './almacenamiento-offline.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmergenciaService {
   private http = inject(HttpClient);
+  private auth = inject(AuthService);
   // Cambiado a ruta relativa para que lo intercepte el proxy.conf.json
   private apiUrl = '/api/emergencias';
   private cambios = new BehaviorSubject<void>(undefined);
@@ -27,7 +29,7 @@ export class EmergenciaService {
   }
 
   // 3. Crear una nueva emergencia
-  crearEmergencia(emergencia: Emergencia): Observable<{ offline: boolean }> {
+  crearEmergencia(emergencia: Emergencia): Observable<{ offline: boolean; direccion?: string | null }> {
     const reporteLocal: Emergencia = {
       ...emergencia,
       id_local: crypto.randomUUID(),
@@ -38,8 +40,9 @@ export class EmergenciaService {
 
     if (!navigator.onLine) return this.guardarOffline(reporteLocal);
 
-    return this.http.post(`${this.apiUrl}/reportar`, emergencia).pipe(
-      map(() => ({ offline: false })),
+    return this.http.post<{ direccion?: string | null }>(`${this.apiUrl}/reportar`, emergencia).pipe(
+      timeout(12_000),
+      map(respuesta => ({ offline: false, direccion: respuesta.direccion })),
       tap(() => this.cambios.next()),
       catchError(() => this.guardarOffline(reporteLocal))
     );
@@ -60,7 +63,7 @@ export class EmergenciaService {
         const pendientes = reportes.filter(r => r.estado_sync !== 'SINCRONIZADO');
         if (!pendientes.length) return of(0);
         return this.http.post<{ detalles?: Array<{ temp_id: string; estado: string }> }>('/api/sync/batch', {
-          id_usuario: 1,
+          id_usuario: this.auth.usuarioActual()?.id_usuario,
           operaciones: pendientes.map(reporte => ({
             temp_id: reporte.id_local,
             tipo_operacion: 'CREAR_EMERGENCIA',
@@ -78,7 +81,7 @@ export class EmergenciaService {
     );
   }
 
-  private guardarOffline(reporte: Emergencia): Observable<{ offline: boolean }> {
+  private guardarOffline(reporte: Emergencia): Observable<{ offline: boolean; direccion?: string | null }> {
     return from(this.almacenamiento.guardar(reporte)).pipe(
       map(() => ({ offline: true })),
       tap(() => this.cambios.next()),

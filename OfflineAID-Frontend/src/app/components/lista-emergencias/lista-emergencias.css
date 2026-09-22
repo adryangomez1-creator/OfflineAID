@@ -1,34 +1,4 @@
-h3 {
-  color: var(--text-primary);
-  font-weight: 700;
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Tarjeta individual de alerta */
-.card {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-card);
-  border-radius: 10px;
-  transition: all 0.2s ease;
-}
-
-.card:hover {
-  border-color: var(--accent-blue);
-  transform: translateY(-2px);
-}
-
-.card-title {
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.card-text {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
+.actualizar { float:right; margin-top:-2rem; padding:.25rem .5rem; color:var(--accent-blue); background:transparent; border:1px solid var(--border-card); border-radius:5px; font-size:.62rem; }.estado-lista { padding:1rem; color:var(--text-secondary); background:var(--bg-card); border:1px solid var(--border-card); border-radius:7px; font-size:.75rem; }.estado-lista.error { color:#fecdd3; }.alerta-item { padding:.75rem .6rem; background:var(--bg-card); border:1px solid var(--border-card); border-left:3px solid var(--accent-red); }.alerta-item + .alerta-item { margin-top:.35rem; }.alerta-cuerpo h5 { margin:0 0 .18rem; color:#fff; font-size:.77rem; }.alerta-cuerpo > p { overflow:hidden; margin:0 0 .45rem; color:var(--text-secondary); font-size:.67rem; white-space:nowrap; text-overflow:ellipsis; }.detalle { display:flex; gap:.65rem; align-items:center; flex-wrap:wrap; }.detalle small { color:#7087a6; font-size:.58rem; }
 
 /* Badges de nivel o estado */
 .badge {
@@ -40,17 +10,6 @@ h3 {
 }
 
 /* Botón actualizar */
-.btn-outline-primary {
-  color: var(--accent-blue);
-  border-color: var(--accent-blue);
-  border-radius: 8px;
-}
-
-.btn-outline-primary:hover {
-  background-color: var(--accent-blue);
-  color: #0b1320;
-}
-
 .sync-badge, .tipo {
   color: var(--accent-blue);
   font-size: .72rem;

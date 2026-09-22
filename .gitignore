@@ -1,0 +1,6 @@
+node_modules/
+OfflineAID-Backend/node_modules/
+OfflineAID-Frontend/node_modules/
+.angular/
+dist/
+.env

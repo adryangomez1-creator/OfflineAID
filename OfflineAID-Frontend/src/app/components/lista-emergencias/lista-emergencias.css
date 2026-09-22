@@ -1,0 +1,75 @@
+h3 {
+  color: var(--text-primary, #ffffff);
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Tarjeta individual de alerta */
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  /* 1. Forzamos un color de texto base claro para todo lo que esté dentro de la tarjeta */
+  color: #e2e8f0; 
+}
+
+.card:hover {
+  border-color: var(--accent-blue);
+  transform: translateY(-2px);
+}
+
+.card-title {
+  /* En tu imagen el título se ve rojo, si quieres que resalte usa tu accent-red */
+  color: var(--accent-red, #ff6b6b);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* 2. Arreglamos la descripción y ubicación */
+.card-text, 
+.card p, 
+.card span {
+  /* Reemplazamos var(--text-secondary) por un gris claro hielo, ideal para fondos azul marino */
+  color: #cbd5e1 !important; 
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Badges de nivel o estado */
+.badge {
+  background-color: rgba(217, 37, 70, 0.15) !important;
+  /* 3. Aclaramos un poco el rojo del texto para que no se pierda en el fondo oscuro */
+  color: #ff768e !important; 
+  border: 1px solid rgba(217, 37, 70, 0.5);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Botón actualizar */
+.btn-outline-primary {
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
+  border-radius: 8px;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--accent-blue);
+  /* El texto oscuro sobre el botón azul brillante al hacer hover da excelente contraste */
+  color: #020ef7; 
+}
+
+.sync-badge, .tipo {
+  color: var(--accent-blue);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+
+.sync-badge.error { 
+  /* Brillo extra para errores */
+  color: #ff768e; 
+}

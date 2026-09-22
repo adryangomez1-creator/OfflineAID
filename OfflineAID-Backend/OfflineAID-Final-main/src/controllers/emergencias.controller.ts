@@ -4,6 +4,30 @@ import { pool } from '../config/database.js';
 import { obtenerDireccionDesdeCoordenadas } from '../services/geocoding.service.js';
 
 export const emergenciasController = {
+  obtenerEmergenciasConEvidencias: async (_req: Request, res: Response): Promise<void> => {
+    try {
+      const [emergencias] = await pool.query<RowDataPacket[]>('SELECT * FROM Emergencias ORDER BY fecha_creacion DESC');
+      const [evidencias] = await pool.query<RowDataPacket[]>(
+        'SELECT id_emergencia, url_imagen FROM Evidencias WHERE url_imagen IS NOT NULL AND url_imagen <> ?',
+        ['']
+      );
+      const evidenciasPorEmergencia = new Map<number, string[]>();
+
+      for (const evidencia of evidencias) {
+        const urls = evidenciasPorEmergencia.get(evidencia.id_emergencia) ?? [];
+        urls.push(evidencia.url_imagen);
+        evidenciasPorEmergencia.set(evidencia.id_emergencia, urls);
+      }
+
+      res.json(emergencias.map(emergencia => ({
+        ...emergencia,
+        evidencias: evidenciasPorEmergencia.get(emergencia.id_emergencia) ?? []
+      })));
+    } catch {
+      res.status(500).json({ error: 'Error al obtener las emergencias con sus evidencias' });
+    }
+  },
+
   /**
    * Reporte integral de emergencia con evidencias fotográficas adjuntas y notificación.
    * Si no se envía dirección pero sí coordenadas (como en SOS), se resuelve automáticamente con OpenStreetMap.

@@ -1,20 +1,21 @@
 import { Component, effect, isDevMode, OnDestroy, OnInit, inject } from '@angular/core';
-import { Subscription, timeout } from 'rxjs';
+import { Router } from '@angular/router';
+import { Subscription, timeout } from 'rxjs'; // <-- Solo un timeout aquí
 import { CrearEmergenciaComponent } from './components/crear-emergencia/crear-emergencia';
 import { NoticiasComponent } from './components/noticias/noticias';
 import { ListaEmergenciasComponent } from './components/lista-emergencias/lista-emergencias';
+import { AuthComponent } from './components/auth/auth'; // <-- Este arregla la línea 16
 import { ConexionService } from './services/conexion.service';
 import { EmergenciaService } from './services/emergencia.service';
 import { AuthService } from './services/auth.service';
 import { UbicacionService } from './services/ubicacion.service';
-import { timeout } from 'rxjs';
-
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
+  imports: [ 
     CrearEmergenciaComponent,
     ListaEmergenciasComponent,
+    NoticiasComponent,
     AuthComponent
   ],
   templateUrl: './app.html',

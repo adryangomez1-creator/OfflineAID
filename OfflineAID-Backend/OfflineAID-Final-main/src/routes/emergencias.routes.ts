@@ -3,6 +3,8 @@ import { emergenciasController } from '../controllers/emergencias.controller.js'
 
 const router: ExpressRouter = Router();
 
+router.get('/emergencias', emergenciasController.obtenerEmergenciasConEvidencias);
+
 // Reporte integral de emergencia con evidencias
 router.post('/emergencias/reportar', emergenciasController.reportarEmergencia);
 

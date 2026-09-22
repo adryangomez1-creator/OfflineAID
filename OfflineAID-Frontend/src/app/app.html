@@ -41,8 +41,7 @@
     <section class="acciones">
       <p>ACCIONES RÁPIDAS</p>
       <div class="acciones-grid">
-        <button type="button" (click)="abrirReporte()"><b>⌖</b><span>Ver ubicación</span><small>GPS: última sincronización</small></button>
-        <button type="button" (click)="abrirReporte()"><b>▣</b><span>Nuevo reporte</span><small>Guardar info de ubicación</small></button>
+        
       </div>
     </section>
 
@@ -55,6 +54,11 @@
   <section class="alertas">
     <div class="alertas-titulo"><p>ALERTAS Y NOTICIAS RECIENTES</p><span>EN VIVO</span></div>
       <app-lista-emergencias></app-lista-emergencias>
+  </section>
+
+  <section class="alertas noticias">
+    <div class="alertas-titulo"><p>NOTICIAS DE EMERGENCIAS</p><span>EN VIVO</span></div>
+    <app-noticias></app-noticias>
   </section>
 </main>
 }

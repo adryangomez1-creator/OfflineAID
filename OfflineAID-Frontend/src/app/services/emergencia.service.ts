@@ -20,6 +20,10 @@ export class EmergenciaService {
     return this.http.get<Emergencia[]>(this.apiUrl);
   }
 
+  getEmergenciasPorUsuario(idUsuario: number): Observable<Emergencia[]> {
+    return this.http.get<Emergencia[]>(`${this.apiUrl}/usuario/${idUsuario}`);
+  }
+
   getEmergenciaById(id: number): Observable<Emergencia> {
     return this.http.get<Emergencia>(`${this.apiUrl}/${id}`);
   }
@@ -43,10 +47,15 @@ export class EmergenciaService {
   }
 
   reportesCombinados(): Observable<Emergencia[]> {
-    const remotos$ = this.http.get<Emergencia[]>(this.apiUrl).pipe(
+    const idUsuario = this.auth.usuarioActual()?.id_usuario;
+    const remotos$ = (idUsuario
+      ? this.getEmergenciasPorUsuario(idUsuario)
+      : of([] as Emergencia[])
+    ).pipe(
       catchError(() => of([] as Emergencia[]))
     );
     const locales$ = from(this.almacenamiento.obtenerTodos()).pipe(
+      map(reportes => idUsuario ? reportes.filter(reporte => reporte.id_usuario === idUsuario) : []),
       catchError(() => of([] as Emergencia[]))
     );
 

@@ -43,8 +43,11 @@ export class AuthComponent {
     this.error = '';
     const { correo, password } = this.loginForm.getRawValue();
     this.auth.iniciarSesion(correo, password).pipe(timeout(10_000), finalize(() => this.cargando = false)).subscribe({
-      next: () => undefined,
-      error: ({ error }) => { this.error = error?.error ?? 'No fue posible iniciar sesión. Verifica que el backend esté disponible.'; }
+      next: ({ usuario }) => this.router.navigateByUrl(this.esPersonalInstitucional(usuario.rol) ? '/admin' : '/usuario'),
+      error: (respuesta: { error?: { error?: string } }) => {
+        this.error = respuesta.error?.error ?? 'No fue posible iniciar sesión. Verifica que el backend esté disponible.';
+        this.loginForm.controls.password.reset();
+      }
     });
   }
 
@@ -55,8 +58,12 @@ export class AuthComponent {
     this.cargando = true;
     this.error = '';
     this.auth.registrar(datos).pipe(timeout(10_000), finalize(() => this.cargando = false)).subscribe({
-      next: ({ usuario }) => this.router.navigateByUrl(usuario.rol === 'ADMIN' ? '/admin' : '/usuario'),
+      next: ({ usuario }) => this.router.navigateByUrl(this.esPersonalInstitucional(usuario.rol) ? '/admin' : '/usuario'),
       error: ({ error }) => { this.error = error?.error ?? 'No fue posible crear la cuenta. Verifica que el backend esté disponible.'; }
     });
+  }
+
+  private esPersonalInstitucional(rol: string): boolean {
+    return rol === 'ADMIN' || rol === 'OPERATOR' || rol === 'OPERADOR';
   }
 }

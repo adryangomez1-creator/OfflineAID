@@ -59,7 +59,7 @@ CREATE TABLE Emergencias (
 CREATE TABLE Evidencias (
     id_evidencia  INT AUTO_INCREMENT PRIMARY KEY,
     id_emergencia INT NOT NULL,
-    url_imagen    VARCHAR(500),
+    url_imagen    MEDIUMTEXT,
     fecha_subida  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_emergencia) REFERENCES Emergencias(id_emergencia) ON DELETE CASCADE
 );

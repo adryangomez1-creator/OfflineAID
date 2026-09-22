@@ -1,21 +1,22 @@
 import { Component, effect, isDevMode, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CrearEmergenciaComponent } from './components/crear-emergencia/crear-emergencia';
+import { NoticiasComponent } from './components/noticias/noticias';
 import { ListaEmergenciasComponent } from './components/lista-emergencias/lista-emergencias';
 import { ConexionService } from './services/conexion.service';
 import { EmergenciaService } from './services/emergencia.service';
 import { AuthService } from './services/auth.service';
-import { AuthComponent } from './components/auth/auth';
 import { UbicacionService } from './services/ubicacion.service';
 import { timeout } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CrearEmergenciaComponent,
-    ListaEmergenciasComponent,
-    AuthComponent
+    NoticiasComponent,
+    ListaEmergenciasComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private emergenciaService = inject(EmergenciaService);
   private auth = inject(AuthService);
   private ubicacion = inject(UbicacionService);
+  private router = inject(Router);
   enLinea = navigator.onLine;
   sincronizando = false;
   mostrarFormulario = false;
@@ -54,7 +56,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void { this.conexionSub?.unsubscribe(); }
 
-  cerrarSesion(): void { this.auth.cerrarSesion(); }
+  cerrarSesion(): void {
+    this.auth.cerrarSesion();
+    this.router.navigateByUrl('/login');
+  }
 
   abrirReporte(): void { this.mostrarFormulario = true; }
 

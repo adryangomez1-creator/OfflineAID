@@ -1,0 +1,11 @@
+.actualizar { float: right; margin-top: -2rem; padding: .25rem .5rem; color: var(--accent-blue); background: transparent; border: 1px solid var(--border-card); border-radius: 5px; font-size: .62rem; }
+.estado-lista { padding: 1rem; color: var(--text-secondary); background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 7px; font-size: .75rem; }
+.estado-lista.error { color: #fecdd3; }
+.noticia-item { padding: .75rem .6rem; background: var(--bg-card); border: 1px solid var(--border-card); border-left: 3px solid var(--accent-blue); }
+.noticia-item + .noticia-item { margin-top: .35rem; }
+.noticia-cuerpo h5 { margin: .15rem 0 .25rem; color: #fff; font-size: .77rem; }
+.noticia-cuerpo p { margin: 0 0 .45rem; color: var(--text-secondary); font-size: .67rem; line-height: 1.4; }
+.nivel { color: var(--connection-green); font-size: .58rem; font-weight: 700; letter-spacing: .08em; }
+.detalle { display: flex; gap: .65rem; align-items: center; flex-wrap: wrap; }
+.detalle small { color: #7087a6; font-size: .58rem; }
+.detalle a { color: var(--accent-blue); font-size: .58rem; font-weight: 700; }

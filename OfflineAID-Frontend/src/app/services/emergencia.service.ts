@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, combineLatest, from, map, of, switchMap, tap, throwError } from 'rxjs';
 import { Emergencia } from '../models/emergencia.model';
 import { AlmacenamientoOfflineService } from './almacenamiento-offline.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class EmergenciaService {
   private cambios = new BehaviorSubject<void>(undefined);
   readonly cambios$ = this.cambios.asObservable();
 
-  constructor(private almacenamiento: AlmacenamientoOfflineService) {}
+  constructor(private almacenamiento: AlmacenamientoOfflineService, private auth: AuthService) {}
 
   getEmergencias(): Observable<Emergencia[]> {
     return this.http.get<Emergencia[]>(this.apiUrl);
@@ -42,15 +43,19 @@ export class EmergenciaService {
   }
 
   reportesCombinados(): Observable<Emergencia[]> {
-    const remotos$ = this.http.get<Emergencia[]>(this.apiUrl).pipe(
+    const idUsuario = this.auth.usuarioActual()?.id_usuario;
+    const remotos$ = idUsuario
+      ? this.http.get<Emergencia[]>(`${this.apiUrl}/usuario/${idUsuario}`)
+      : of([] as Emergencia[]);
+    const remotosSeguros$ = remotos$.pipe(
       catchError(() => of([] as Emergencia[]))
     );
     const locales$ = from(this.almacenamiento.obtenerTodos()).pipe(
       catchError(() => of([] as Emergencia[]))
     );
 
-    return combineLatest([locales$, remotos$]).pipe(
-      map(([locales, remotos]) => [...locales, ...remotos])
+    return combineLatest([locales$, remotosSeguros$]).pipe(
+      map(([locales, remotos]) => [...locales.filter(reporte => reporte.id_usuario === idUsuario), ...remotos])
     );
   }
 
@@ -63,7 +68,7 @@ export class EmergenciaService {
         if (!pendientes.length) return of(0);
 
         return this.http.post<{ detalles?: Array<{ temp_id: string; estado: string }> }>('/api/sync/batch', {
-          id_usuario: 1,
+          id_usuario: this.auth.usuarioActual()?.id_usuario,
           operaciones: pendientes.map(reporte => ({
             temp_id: reporte.id_local,
             tipo_operacion: 'CREAR_EMERGENCIA',

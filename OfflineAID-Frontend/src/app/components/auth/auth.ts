@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 import { finalize, timeout } from 'rxjs';
 
 @Component({
@@ -13,6 +14,7 @@ import { finalize, timeout } from 'rxjs';
 export class AuthComponent {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
   modo: 'login' | 'registro' = 'login';
   cargando = false;
   error = '';
@@ -41,7 +43,7 @@ export class AuthComponent {
     this.error = '';
     const { correo, password } = this.loginForm.getRawValue();
     this.auth.iniciarSesion(correo, password).pipe(timeout(10_000), finalize(() => this.cargando = false)).subscribe({
-      next: () => undefined,
+      next: ({ usuario }) => this.router.navigateByUrl(usuario.rol === 'ADMIN' ? '/admin' : '/usuario'),
       error: ({ error }) => { this.error = error?.error ?? 'No fue posible iniciar sesión. Verifica que el backend esté disponible.'; }
     });
   }
@@ -53,7 +55,7 @@ export class AuthComponent {
     this.cargando = true;
     this.error = '';
     this.auth.registrar(datos).pipe(timeout(10_000), finalize(() => this.cargando = false)).subscribe({
-      next: () => undefined,
+      next: ({ usuario }) => this.router.navigateByUrl(usuario.rol === 'ADMIN' ? '/admin' : '/usuario'),
       error: ({ error }) => { this.error = error?.error ?? 'No fue posible crear la cuenta. Verifica que el backend esté disponible.'; }
     });
   }

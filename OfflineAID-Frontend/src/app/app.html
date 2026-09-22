@@ -1,6 +1,3 @@
-@if (!usuario()) {
-  <app-auth></app-auth>
-} @else {
 <nav class="navbar px-3">
   <span class="navbar-brand text-uppercase">
     Offline<span>AID</span>
@@ -54,7 +51,11 @@
 
   <section class="alertas">
     <div class="alertas-titulo"><p>ALERTAS Y NOTICIAS RECIENTES</p><span>EN VIVO</span></div>
-      <app-lista-emergencias></app-lista-emergencias>
+      <app-noticias></app-noticias>
+  </section>
+
+  <section class="alertas mis-reportes">
+    <div class="alertas-titulo"><p>MIS REPORTES</p><span>PERSONALES</span></div>
+    <app-lista-emergencias></app-lista-emergencias>
   </section>
 </main>
-}

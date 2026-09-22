@@ -18,8 +18,10 @@
     "typescript": "latest"
   },
   "dependencies": {
+    "axios": "^1.8.4",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "fast-xml-parser": "^5.2.5",
     "mysql2": "^3.24.3"
   }
 }

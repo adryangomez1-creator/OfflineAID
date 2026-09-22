@@ -1,0 +1,22 @@
+<button class="actualizar" type="button" (click)="cargarNoticias()">↻ Actualizar</button>
+
+@if (cargando) { <div class="estado-lista">Cargando noticias...</div> }
+@if (error) { <div class="estado-lista error">{{ error }}</div> }
+@if (!cargando && !error && noticias.length === 0) { <div class="estado-lista">No hay noticias recientes.</div> }
+
+@if (!cargando && noticias.length > 0) {
+  @for (noticia of noticias; track noticia.id) {
+    <article class="noticia-item">
+      <div class="noticia-cuerpo">
+        <span class="nivel">{{ noticia.level }}</span>
+        <h5>{{ noticia.title }}</h5>
+        @if (noticia.description) { <p>{{ noticia.description }}</p> }
+      </div>
+      <div class="detalle">
+        <small>{{ noticia.source || 'Fuente informativa' }}</small>
+        <small>{{ noticia.location }} · {{ noticia.createdAt | date:'short' }}</small>
+        @if (noticia.url) { <a [href]="noticia.url" target="_blank" rel="noopener noreferrer">Leer noticia</a> }
+      </div>
+    </article>
+  }
+}

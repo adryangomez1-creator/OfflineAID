@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Incidentes recientes de Guatemala</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4f6f8;
+        --panel: #ffffff;
+        --text: #182230;
+        --muted: #667085;
+        --line: #d9e0ea;
+        --accent: #047857;
+        --accent-soft: #dff7ec;
+        --danger: #b42318;
+        --danger-soft: #fee4e2;
+        --warning: #b54708;
+        --warning-soft: #fef0c7;
+        --info: #175cd3;
+        --info-soft: #d1e9ff;
+        --general: #475467;
+        --general-soft: #eaecf0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .shell {
+        width: min(1160px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 42px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.55rem, 2vw, 2.1rem);
+        letter-spacing: 0;
+      }
+
+      .subtitle {
+        display: block;
+        margin-top: 5px;
+        color: var(--muted);
+      }
+
+      .refresh {
+        display: inline-grid;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .refresh:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin: 22px 0;
+      }
+
+      .metric {
+        min-height: 96px;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+      }
+
+      .metric span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 1.9rem;
+        line-height: 1;
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .filter {
+        min-height: 38px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .filter[aria-pressed="true"] {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+        color: #046047;
+      }
+
+      .status {
+        color: var(--muted);
+        font-size: 0.9rem;
+        text-align: right;
+      }
+
+      .news-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .news-item {
+        display: grid;
+        grid-template-columns: 176px minmax(0, 1fr);
+        gap: 16px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+      }
+
+      .thumb {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        overflow: hidden;
+        border-radius: 6px;
+        background: var(--general-soft);
+      }
+
+      .thumb img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .thumb-fallback {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        place-items: center;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .news-body {
+        min-width: 0;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 7px;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 0.76rem;
+        font-weight: 700;
+      }
+
+      .badge.ALERTA {
+        background: var(--warning-soft);
+        color: var(--warning);
+      }
+
+      .badge.ACCIDENTE,
+      .badge.AYUDA,
+      .badge.RESCATE,
+      .badge.INCENDIO,
+      .badge.SISMO,
+      .badge.INUNDACION,
+      .badge.DERRUMBE {
+        background: var(--danger-soft);
+        color: var(--danger);
+      }
+
+      .badge.TRANSITO,
+      .badge.CLIMA,
+      .badge.PREVENCION {
+        background: var(--info-soft);
+        color: var(--info);
+      }
+
+      .news-title {
+        display: inline-block;
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 700;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+        text-decoration: none;
+      }
+
+      .news-title:hover {
+        color: var(--accent);
+        text-decoration: underline;
+      }
+
+      .news-item.new-item {
+        border-color: var(--accent);
+        box-shadow: inset 4px 0 0 var(--accent);
+      }
+
+      .description {
+        margin: 8px 0 0;
+        color: #344054;
+        line-height: 1.45;
+      }
+
+      .empty {
+        padding: 36px 18px;
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 760px) {
+        .topbar,
+        .toolbar {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .status {
+          text-align: left;
+        }
+
+        .summary {
+          grid-template-columns: 1fr;
+        }
+
+        .news-item {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <h1>Incidentes y solicitudes de ayuda</h1>
+          <span class="subtitle">Accidentes, rescates, incendios, clima severo y alertas verificadas de Guatemala</span>
+        </div>
+        <button class="refresh" id="refreshButton" type="button" title="Actualizar noticias" aria-label="Actualizar noticias">
+          &#8635;
+        </button>
+      </header>
+
+      <section class="summary" aria-label="Resumen">
+        <div class="metric">
+          <span>Incidentes mostrados</span>
+          <strong id="totalCount">0</strong>
+        </div>
+        <div class="metric">
+          <span>Nuevos de la ultima hora</span>
+          <strong id="unreadCount">0</strong>
+        </div>
+        <div class="metric">
+          <span>Ultima consulta</span>
+          <strong id="updatedAt">--:--</strong>
+        </div>
+      </section>
+
+      <section aria-label="Listado de noticias">
+        <div class="toolbar">
+          <div class="filters" aria-label="Filtros">
+            <button class="filter" type="button" data-filter="TODOS" aria-pressed="true">Todos</button>
+            <button class="filter" type="button" data-filter="RECIENTES" aria-pressed="false">Ultima hora</button>
+            <button class="filter" type="button" data-filter="ACCIDENTE" aria-pressed="false">Accidentes</button>
+            <button class="filter" type="button" data-filter="AYUDA" aria-pressed="false">Ayuda</button>
+            <button class="filter" type="button" data-filter="RESCATE" aria-pressed="false">Rescate</button>
+            <button class="filter" type="button" data-filter="INCENDIO" aria-pressed="false">Incendios</button>
+            <button class="filter" type="button" data-filter="CLIMA" aria-pressed="false">Clima</button>
+            <button class="filter" type="button" data-filter="TRANSITO" aria-pressed="false">Transito</button>
+          </div>
+          <span class="status" id="status">Cargando incidentes...</span>
+        </div>
+
+        <div class="news-list" id="reports"></div>
+      </section>
+    </main>
+
+    <script>
+      const reportsEl = document.querySelector('#reports');
+      const statusEl = document.querySelector('#status');
+      const totalCountEl = document.querySelector('#totalCount');
+      const unreadCountEl = document.querySelector('#unreadCount');
+      const updatedAtEl = document.querySelector('#updatedAt');
+      const refreshButton = document.querySelector('#refreshButton');
+      const filterButtons = [...document.querySelectorAll('.filter')];
+
+      let reports = [];
+      let activeFilter = 'TODOS';
+      let knownIds = new Set();
+      let latestNewIds = new Set();
+      let autoRefreshId;
+
+      function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[char]));
+      }
+
+      function escapeAttr(value) {
+        return escapeHtml(value).replace(/`/g, '&#096;');
+      }
+
+      function formatDate(value) {
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+          return 'Fecha no disponible';
+        }
+
+        return new Intl.DateTimeFormat('es-GT', {
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        }).format(date);
+      }
+
+      function getVisibleReports() {
+        return reports.filter((report) => {
+          if (activeFilter === 'TODOS') return true;
+          if (activeFilter === 'RECIENTES') return report.isUnread;
+
+          return report.level === activeFilter;
+        });
+      }
+
+      function render() {
+        const visibleReports = getVisibleReports();
+        totalCountEl.textContent = String(reports.length);
+        unreadCountEl.textContent = String(reports.filter((report) => report.isUnread).length);
+
+        if (visibleReports.length === 0) {
+          reportsEl.innerHTML = '<div class="empty">No hay noticias para este filtro.</div>';
+          statusEl.textContent = 'Sin resultados para mostrar';
+          return;
+        }
+
+        statusEl.textContent = `${visibleReports.length} incidente${visibleReports.length === 1 ? '' : 's'} en vista`;
+        reportsEl.innerHTML = visibleReports.map((report) => {
+          const title = escapeHtml(report.title);
+          const source = escapeHtml(report.source || 'Fuente no disponible');
+          const description = report.description
+            ? `<p class="description">${escapeHtml(report.description)}</p>`
+            : '';
+          const image = report.imageUrl
+            ? `<img src="${escapeAttr(report.imageUrl)}" alt="">`
+            : '<span class="thumb-fallback">Sin imagen</span>';
+          const href = report.url ? escapeAttr(report.url) : '#';
+          const targetAttrs = report.url ? ' target="_blank" rel="noopener noreferrer"' : '';
+          const newClass = latestNewIds.has(report.id) ? ' new-item' : '';
+
+          return `
+            <article class="news-item${newClass}">
+              <div class="thumb">${image}</div>
+              <div class="news-body">
+                <div class="meta">
+                  <span class="badge ${escapeAttr(report.level)}">${escapeHtml(report.level)}</span>
+                  <span>${source}</span>
+                  <time datetime="${escapeAttr(report.createdAt)}">${formatDate(report.createdAt)}</time>
+                </div>
+                <a class="news-title" href="${href}"${targetAttrs}>${title}</a>
+                ${description}
+              </div>
+            </article>
+          `;
+        }).join('');
+      }
+
+      async function loadReports() {
+        statusEl.textContent = 'Cargando incidentes...';
+        refreshButton.disabled = true;
+
+        try {
+          const response = await fetch('/api/news');
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || 'Respuesta no valida del servidor');
+          }
+
+          const nextReports = Array.isArray(data.alerts) ? data.alerts : [];
+          const nextIds = new Set(nextReports.map((report) => report.id));
+          latestNewIds = knownIds.size > 0
+            ? new Set(nextReports.filter((report) => !knownIds.has(report.id)).map((report) => report.id))
+            : new Set();
+          reports = nextReports;
+          knownIds = nextIds;
+          updatedAtEl.textContent = new Intl.DateTimeFormat('es-GT', {
+            hour: '2-digit',
+            minute: '2-digit'
+          }).format(new Date());
+
+          render();
+
+          if (latestNewIds.size > 0) {
+            statusEl.textContent = `${latestNewIds.size} incidente${latestNewIds.size === 1 ? '' : 's'} nuevo${latestNewIds.size === 1 ? '' : 's'}`;
+            document.title = `(${latestNewIds.size}) Incidentes recientes de Guatemala`;
+          } else {
+            document.title = 'Incidentes recientes de Guatemala';
+          }
+        } catch (error) {
+          reports = [];
+          reportsEl.innerHTML = `<div class="empty">${escapeHtml(error.message || 'No se pudieron cargar los incidentes.')}</div>`;
+          statusEl.textContent = 'Error al consultar la API';
+          totalCountEl.textContent = '0';
+          unreadCountEl.textContent = '0';
+        } finally {
+          refreshButton.disabled = false;
+        }
+      }
+
+      filterButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          activeFilter = button.dataset.filter;
+          filterButtons.forEach((item) => {
+            item.setAttribute('aria-pressed', String(item === button));
+          });
+          render();
+        });
+      });
+
+      refreshButton.addEventListener('click', loadReports);
+      loadReports();
+      autoRefreshId = window.setInterval(loadReports, 60000);
+      window.addEventListener('beforeunload', () => window.clearInterval(autoRefreshId));
+    </script>
+  </body>
+</html>

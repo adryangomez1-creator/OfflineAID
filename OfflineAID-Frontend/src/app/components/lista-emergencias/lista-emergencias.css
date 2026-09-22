@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 h3 {
   color: var(--text-primary, #ffffff);
   font-weight: 700;
@@ -45,11 +46,21 @@ h3 {
   /* 3. Aclaramos un poco el rojo del texto para que no se pierda en el fondo oscuro */
   color: #ff768e !important; 
   border: 1px solid rgba(217, 37, 70, 0.5);
+=======
+.actualizar { float:right; margin-top:-2rem; padding:.25rem .5rem; color:var(--accent-blue); background:transparent; border:1px solid var(--border-card); border-radius:5px; font-size:.62rem; }.estado-lista { padding:1rem; color:var(--text-secondary); background:var(--bg-card); border:1px solid var(--border-card); border-radius:7px; font-size:.75rem; }.estado-lista.error { color:#fecdd3; }.alerta-item { padding:.75rem .6rem; background:var(--bg-card); border:1px solid var(--border-card); border-left:3px solid var(--accent-red); }.alerta-item + .alerta-item { margin-top:.35rem; }.alerta-cuerpo h5 { margin:0 0 .18rem; color:#fff; font-size:.77rem; }.alerta-cuerpo > p { overflow:hidden; margin:0 0 .45rem; color:var(--text-secondary); font-size:.67rem; white-space:nowrap; text-overflow:ellipsis; }.detalle { display:flex; gap:.65rem; align-items:center; flex-wrap:wrap; }.detalle small { color:#7087a6; font-size:.58rem; }
+
+/* Badges de nivel o estado */
+.badge {
+  background-color: rgba(217, 37, 70, 0.2) !important;
+  color: var(--accent-red) !important;
+  border: 1px solid var(--accent-red);
+>>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
   font-weight: 600;
   letter-spacing: 0.5px;
 }
 
 /* Botón actualizar */
+<<<<<<< HEAD
 .btn-outline-primary {
   color: var(--accent-blue);
   border-color: var(--accent-blue);
@@ -62,14 +73,20 @@ h3 {
   color: #020ef7; 
 }
 
+=======
+>>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
 .sync-badge, .tipo {
   color: var(--accent-blue);
   font-size: .72rem;
   font-weight: 700;
   letter-spacing: .03em;
 }
+<<<<<<< HEAD
 
 .sync-badge.error { 
   /* Brillo extra para errores */
   color: #ff768e; 
 }
+=======
+.sync-badge.error { color: var(--accent-red); }
+>>>>>>> 7c8105196893229ee258a346515a685f36d30ce3

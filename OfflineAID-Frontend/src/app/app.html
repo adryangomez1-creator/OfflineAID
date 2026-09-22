@@ -1,0 +1,60 @@
+@if (!usuario()) {
+  <app-auth></app-auth>
+} @else {
+<nav class="navbar px-3">
+  <span class="navbar-brand text-uppercase">
+    Offline<span>AID</span>
+  </span>
+  <div class="estado-conexion" [class.offline]="!enLinea">
+    <span class="punto-conexion"></span>
+    {{ enLinea ? 'EN LÍNEA' : 'MODO OFFLINE' }}
+  </div>
+  <div class="usuario-menu">
+    <span>Hola, {{ usuario()!.nombre }}</span>
+    <button type="button" (click)="cerrarSesion()">Salir</button>
+  </div>
+</nav>
+
+@if (!enLinea) {
+  <div class="aviso-offline">Sin conexión: tus reportes y ubicación se guardarán en este dispositivo.</div>
+}
+
+@if (sincronizando) {
+  <div class="aviso-sync">Sincronizando reportes pendientes…</div>
+}
+
+<main class="dashboard">
+  <section class="bienvenida">
+    <p>BIENVENIDO/A</p>
+    <h1>{{ usuario()!.nombre }} {{ usuario()!.apellido }}</h1>
+    <div class="estado-ubicacion">
+      <span class="estado-activo">⌁ Reportando activo</span>
+      <span class="direccion-actual">⌖ {{ direccionActual }}</span>
+    </div>
+  </section>
+
+  <section class="sos-area">
+    <p>SEÑAL DE EMERGENCIA</p>
+    <button type="button" class="sos" (click)="abrirReporte()"><span>ϟ</span>SOS</button>
+  </section>
+
+  <section class="acciones">
+    <p>ACCIONES RÁPIDAS</p>
+    <div class="acciones-grid">
+      <button type="button" (click)="abrirReporte()"><b>⌖</b><span>Ver ubicación</span><small>GPS: última sincronización</small></button>
+      <button type="button" (click)="abrirReporte()"><b>▣</b><span>Nuevo reporte</span><small>Guardar info de ubicación</small></button>
+    </div>
+  </section>
+
+  @if (mostrarFormulario) {
+    <section class="formulario-reporte">
+      <app-crear-emergencia></app-crear-emergencia>
+    </section>
+  }
+
+  <section class="alertas">
+    <div class="alertas-titulo"><p>ALERTAS Y NOTICIAS RECIENTES</p><span>EN VIVO</span></div>
+      <app-lista-emergencias></app-lista-emergencias>
+  </section>
+</main>
+}

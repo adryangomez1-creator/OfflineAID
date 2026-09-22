@@ -1,8 +1,17 @@
 import { CommonModule } from '@angular/common';
+<<<<<<< HEAD
 import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EmergenciaService } from '../../services/emergencia.service';
 
+=======
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EmergenciaService } from '../../services/emergencia.service';
+import { AuthService } from '../../services/auth.service';
+import { UbicacionService } from '../../services/ubicacion.service';
+import { timeout } from 'rxjs';
+>>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
 
 @Component({
   selector: 'app-crear-emergencia',
@@ -14,7 +23,12 @@ import { EmergenciaService } from '../../services/emergencia.service';
 export class CrearEmergenciaComponent {
   private fb = inject(FormBuilder);
   private emergenciaService = inject(EmergenciaService);
+<<<<<<< HEAD
   private cdr = inject(ChangeDetectorRef);
+=======
+  private auth = inject(AuthService);
+  private ubicacion = inject(UbicacionService);
+>>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
 
   cargando = false;
   mensajeExito = false;
@@ -39,7 +53,11 @@ export class CrearEmergenciaComponent {
     titulo: ['', [Validators.required, Validators.minLength(5)]],
     descripcion: ['', [Validators.required, Validators.minLength(10)]],
     id_tipo: [null, [Validators.required]],
+<<<<<<< HEAD
     id_usuario: [1, [Validators.required]], // ID de usuario temporal para pruebas
+=======
+    id_usuario: [this.auth.usuarioActual()?.id_usuario ?? null, [Validators.required]],
+>>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
     direccion: [''],
     latitud: [null],
     longitud: [null]
@@ -57,11 +75,21 @@ export class CrearEmergenciaComponent {
     this.errorMensaje = '';
 
     this.leerEvidencias().then(evidencias => this.emergenciaService.crearEmergencia({ ...this.formEmergencia.value, evidencias }).subscribe({
+<<<<<<< HEAD
       next: ({ offline }) => {
         this.cargando = false;
         this.mensajeExito = true;
         this.mensajeOffline = offline ? 'Reporte guardado en este dispositivo. Se enviará al recuperar conexión.' : '';
         this.formEmergencia.reset({ id_usuario: 1 });
+=======
+      next: ({ offline, direccion }) => {
+        this.cargando = false;
+        this.mensajeExito = true;
+        this.mensajeOffline = offline
+          ? 'Reporte guardado en este dispositivo. Se enviará al recuperar conexión.'
+          : direccion ? `Reporte guardado. Dirección registrada: ${direccion}` : '';
+        this.formEmergencia.reset({ id_usuario: this.auth.usuarioActual()?.id_usuario ?? null });
+>>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
         this.archivos = [];
         this.ubicacionMensaje = '';
       },
@@ -80,6 +108,7 @@ export class CrearEmergenciaComponent {
     }
     this.ubicacionMensaje = 'Obteniendo ubicación…';
     navigator.geolocation.getCurrentPosition(
+<<<<<<< HEAD
       async posicion => {
         const { latitude, longitude } = posicion.coords;
         this.formEmergencia.patchValue({ latitud: latitude, longitud: longitude });
@@ -112,6 +141,23 @@ export class CrearEmergenciaComponent {
           this.ubicacionMensaje = `✅ Coordenadas guardadas (dirección no disponible offline)`;
         }
         this.cdr.detectChanges();
+=======
+      posicion => {
+        const { latitude, longitude } = posicion.coords;
+        this.formEmergencia.patchValue({ latitud: latitude, longitud: longitude });
+        this.ubicacionMensaje = 'Ubicación capturada. Buscando dirección…';
+        this.ubicacion.obtenerDireccion(latitude, longitude).pipe(timeout(6_000)).subscribe({
+          next: ({ direccion }) => {
+            if (direccion) {
+              this.formEmergencia.patchValue({ direccion });
+              this.ubicacionMensaje = 'Ubicación guardada como dirección.';
+            } else {
+              this.ubicacionMensaje = 'Ubicación capturada; no se encontró una dirección.';
+            }
+          },
+          error: () => this.ubicacionMensaje = 'Ubicación capturada. La dirección se resolverá al enviar el reporte.'
+        });
+>>>>>>> 7c8105196893229ee258a346515a685f36d30ce3
       },
       () => this.ubicacionMensaje = 'No fue posible obtener la ubicación. Revisa los permisos del navegador.',
       { enableHighAccuracy: true, timeout: 10_000 }

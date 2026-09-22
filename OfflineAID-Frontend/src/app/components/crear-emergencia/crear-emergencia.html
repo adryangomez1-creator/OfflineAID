@@ -1,0 +1,100 @@
+<div class="card shadow-sm">
+  <div class="card-header">
+    <h4 class="mb-0">Reportar Nueva Emergencia</h4>
+  </div>
+  <div class="card-body">
+
+    @if (mensajeExito) {
+      <div class="alert alert-success" role="status">
+        Emergencia guardada con éxito.
+      </div>
+    }
+
+    @if (mensajeOffline) {
+      <div class="alert alert-offline" role="status">
+        {{ mensajeOffline }}
+      </div>
+    }
+
+    @if (errorMensaje) {
+      <div class="alert alert-danger">
+        {{ errorMensaje }}
+      </div>
+    }
+
+    <form [formGroup]="formEmergencia" (ngSubmit)="guardar()">
+
+      <div class="mb-3">
+        <label class="form-label" for="tipo">Tipo de emergencia</label>
+        <select id="tipo" class="form-select" formControlName="id_tipo">
+          <option [ngValue]="null" disabled>Selecciona una categoría</option>
+          @for (tipo of tipos; track tipo.id) {
+            <option [ngValue]="tipo.id">{{ tipo.nombre }} - {{ tipo.prioridad }}</option>
+          }
+        </select>
+        <small class="prioridad" [class.critica]="prioridadActual() === 'CRITICA'">Prioridad: {{ prioridadActual() }}</small>
+      </div>
+
+      <!-- Título -->
+      <div class="mb-3">
+        <label class="form-label">Título de la Emergencia</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="titulo"
+          placeholder="Ej. Accidente vehicular / Incendio local"
+        />
+        @if (formEmergencia.get('titulo')?.touched && formEmergencia.get('titulo')?.invalid) {
+          <small class="text-danger d-block mt-1">
+            El título es obligatorio y debe tener al menos 5 caracteres.
+          </small>
+        }
+      </div>
+
+      <div class="mb-3 ubicacion">
+        <button type="button" class="btn btn-location" (click)="capturarUbicacion()">⌖ Guardar mi ubicación</button>
+        @if (ubicacionMensaje) { <small class="d-block mt-2">{{ ubicacionMensaje }}</small> }
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="evidencias">Fotos de evidencia (opcional, máximo 3)</label>
+        <input id="evidencias" #inputEvidencias type="file" class="input-archivo" accept="image/*" multiple (change)="seleccionarEvidencias($event)" />
+        <button type="button" class="btn btn-archivo" (click)="inputEvidencias.click()">📎 Seleccionar fotos</button>
+        @if (archivos.length) { <small class="d-block mt-1">{{ archivos.length }} foto(s) seleccionada(s).</small> }
+      </div>
+
+      <!-- Descripción -->
+      <div class="mb-3">
+        <label class="form-label">Descripción del Suceso</label>
+        <textarea
+          class="form-control"
+          rows="3"
+          formControlName="descripcion"
+          placeholder="Describe brevemente lo que está sucediendo..."
+        ></textarea>
+        @if (formEmergencia.get('descripcion')?.touched && formEmergencia.get('descripcion')?.invalid) {
+          <small class="text-danger d-block mt-1">
+            La descripción debe contener al menos 10 caracteres.
+          </small>
+        }
+      </div>
+
+      <!-- Dirección / Ubicación -->
+      <div class="mb-3">
+        <label class="form-label">Dirección / Referencia</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="direccion"
+          placeholder="Ej. Calle principal, cerca del parque central"
+        />
+      </div>
+
+      <!-- Botón Enviar -->
+      <button type="submit" class="btn btn-danger w-100" [disabled]="formEmergencia.invalid || cargando">
+        {{ cargando ? 'Enviando reporte...' : formEmergencia.invalid ? ' Completa el reporte para enviarlo' : 'Reportar Emergencia' }}
+      </button>
+    </form>
+
+  </div>
+</div>

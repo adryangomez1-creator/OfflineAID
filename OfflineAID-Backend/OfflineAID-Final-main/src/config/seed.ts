@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { pool } from './database.js';
 
 export async function poblarDatosIniciales() {
@@ -57,10 +58,11 @@ export async function poblarDatosIniciales() {
     ];
 
     for (const usu of usuarios) {
+      const passwordHash = await bcrypt.hash(String(usu[4]), 10);
       await pool.query(
         `INSERT INTO Usuarios (nombre, apellido, telefono, correo, password, rol, estado, token_push, modelo_dispositivo, sistema_operativo)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        usu
+        [usu[0], usu[1], usu[2], usu[3], passwordHash, usu[5], usu[6], usu[7], usu[8], usu[9]]
       );
     }
     console.log(`✓ ${usuarios.length} usuarios de prueba insertados.`);

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { pool } from '../config/database.js';
 
@@ -29,12 +30,13 @@ export const authController = {
         return;
       }
 
+      const passwordHash = await bcrypt.hash(password, 10);
       const [resultado] = await pool.query<ResultSetHeader>(
         `INSERT INTO Usuarios (nombre, apellido, telefono, correo, password, rol, estado)
          VALUES (?, ?, ?, ?, ?, 'CIUDADANO', 'ACTIVO')`,
         [
           nombre.trim(), apellido.trim(), typeof telefono === 'string' ? telefono.trim() || null : null,
-          correoNormalizado, password
+          correoNormalizado, passwordHash
         ]
       );
       const [usuarios] = await pool.query<RowDataPacket[]>('SELECT * FROM Usuarios WHERE id_usuario = ?', [resultado.insertId]);
@@ -54,9 +56,9 @@ export const authController = {
 
     try {
       const [usuarios] = await pool.query<RowDataPacket[]>(
-        'SELECT * FROM Usuarios WHERE correo = ? AND password = ?', [correo.trim().toLowerCase(), password]
+        'SELECT * FROM Usuarios WHERE correo = ?', [correo.trim().toLowerCase()]
       );
-      if (!usuarios.length) {
+      if (!usuarios.length || !(await bcrypt.compare(password, usuarios[0].password))) {
         res.status(401).json({ error: 'Correo o contraseña incorrectos' });
         return;
       }

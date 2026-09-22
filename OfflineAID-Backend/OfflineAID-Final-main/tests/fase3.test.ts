@@ -45,6 +45,59 @@ test('1. [SYNC] GET /api/sync/datos-offline entrega catálogo de emergencia y pr
   assert.ok(data.fecha_descarga);
 });
 
+test('1b. [CRUD] GET /api/usuarios no expone contraseñas', async () => {
+  const res = await fetch(`${baseUrl}/usuarios`);
+  assert.equal(res.status, 200);
+
+  const usuarios = await res.json();
+  assert.ok(Array.isArray(usuarios));
+  assert.ok(usuarios.length > 0);
+  assert.equal('password' in usuarios[0], false);
+});
+
+test('1c. [AUTH] registra y valida contraseñas con hash', async () => {
+  const usuarioExistenteRes = await fetch(`${baseUrl}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ correo: 'admin@offlineaid.com', password: 'admin123' }),
+  });
+  assert.equal(usuarioExistenteRes.status, 200);
+
+  const correo = `hash-${Date.now()}@offlineaid.test`;
+  const registroRes = await fetch(`${baseUrl}/auth/registro`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      nombre: 'Usuario',
+      apellido: 'Hash',
+      correo,
+      password: 'clave-segura-123',
+    }),
+  });
+
+  assert.equal(registroRes.status, 201);
+  const registro = await registroRes.json();
+  assert.equal('password' in registro.usuario, false);
+
+  const [usuarios] = await pool.query<any[]>('SELECT password FROM Usuarios WHERE correo = ?', [correo]);
+  assert.equal(usuarios.length, 1);
+  assert.match(usuarios[0].password, /^\$2[aby]\$\d{2}\$/);
+
+  const loginRes = await fetch(`${baseUrl}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ correo, password: 'clave-segura-123' }),
+  });
+  assert.equal(loginRes.status, 200);
+
+  const loginIncorrectoRes = await fetch(`${baseUrl}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ correo, password: 'incorrecta' }),
+  });
+  assert.equal(loginIncorrectoRes.status, 401);
+});
+
 test('2. [SYNC] POST /api/sync/batch procesa lote de cola offline con resolución de IDs temporales', async () => {
   const lotePayload = {
     id_usuario: 3,

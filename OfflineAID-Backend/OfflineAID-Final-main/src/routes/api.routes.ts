@@ -36,7 +36,7 @@ function registrarCrud(ruta: string, tabla: string, id: string, columnas: string
   router.delete(`${ruta}/:id`, crud.eliminar);
 }
 
-registrarCrud('/usuarios', 'Usuarios', 'id_usuario', ['nombre', 'apellido', 'telefono', 'correo', 'password', 'rol', 'estado', 'token_push', 'modelo_dispositivo', 'sistema_operativo']);
+registrarCrud('/usuarios', 'Usuarios', 'id_usuario', ['nombre', 'apellido', 'telefono', 'correo', 'rol', 'estado', 'token_push', 'modelo_dispositivo', 'sistema_operativo']);
 registrarCrud('/tipos-emergencia', 'TiposEmergencia', 'id_tipo', ['nombre', 'descripcion', 'nivel_prioridad']);
 registrarCrud('/emergencias', 'Emergencias', 'id_emergencia', ['id_usuario', 'id_tipo', 'titulo', 'descripcion', 'latitud', 'longitud', 'direccion', 'estado']);
 registrarCrud('/evidencias', 'Evidencias', 'id_evidencia', ['id_emergencia', 'url_imagen']);

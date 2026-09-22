@@ -8,10 +8,12 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "seed": "tsx src/config/seed.ts",
+    "migrate-passwords": "tsx src/config/migrate-passwords.ts",
     "start": "node dist/src/index.js",
     "test": "tsx --test tests/**/*.test.ts"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/node": "latest",
     "tsx": "latest",
@@ -19,6 +21,7 @@
   },
   "dependencies": {
     "axios": "^1.8.4",
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "fast-xml-parser": "^5.2.5",

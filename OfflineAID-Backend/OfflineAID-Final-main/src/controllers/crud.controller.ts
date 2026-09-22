@@ -9,7 +9,7 @@ export function crearCrud(tabla: string, idCampo: string, columnas: string[]) {
     obtenerTodos: async (_req: Request, res: Response) => {
       try {
         const [filas] = await pool.query<RowDataPacket[]>(`SELECT * FROM ${tabla}`);
-        res.json(filas);
+        res.json(sanitizarFilas(filas));
       } catch {
         res.status(500).json({ error: 'Error al obtener los registros' });
       }
@@ -21,7 +21,7 @@ export function crearCrud(tabla: string, idCampo: string, columnas: string[]) {
           res.status(404).json({ error: 'Registro no encontrado' });
           return;
         }
-        res.json(filas[0]);
+        res.json(sanitizarFilas(filas)[0]);
       } catch {
         res.status(500).json({ error: 'Error al obtener el registro' });
       }
@@ -84,4 +84,8 @@ function seleccionarColumnas(cuerpo: Record<string, Value> = {}, columnas: strin
   return Object.fromEntries(
     columnas.filter((columna) => cuerpo[columna] !== undefined).map((columna) => [columna, cuerpo[columna]]),
   ) as Record<string, Value>;
+}
+
+function sanitizarFilas(filas: RowDataPacket[]) {
+  return filas.map(({ password: _password, ...fila }) => fila);
 }

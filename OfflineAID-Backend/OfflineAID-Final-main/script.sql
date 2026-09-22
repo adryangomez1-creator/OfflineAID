@@ -140,12 +140,8 @@ INSERT INTO Instituciones (nombre, tipo, telefono, correo, direccion) VALUES
 ('CONRED',                 'Coordinadora Nacional para la Reducción de Desastres', '119', 'alertas@conred.gob',                  'Avenida Hincapié 21-72 Zona 13'),
 ('Policía Nacional Civil', 'Seguridad ciudadana y orden público',                  '110', 'denuncias@pnc.gob',                   '10a Calle 13-92 Zona 1');
 
--- ============================================
--- DATOS INICIALES - Usuarios de prueba
--- NOTA: contraseñas en texto plano (el backend no hashea)
--- ============================================
 INSERT INTO Usuarios (nombre, apellido, telefono, correo, password, rol, estado, token_push, modelo_dispositivo, sistema_operativo) VALUES
-('Admin',    'Sistema',           '55550001', 'admin@offlineaid.com',        'admin123',    'ADMIN',     'ACTIVO', NULL, 'Web Console', 'Linux'),
-('Operador', 'Centro de Despacho','55550002', 'operador@offlineaid.com',     'operador123', 'OPERADOR',  'ACTIVO', NULL, 'Web Console', 'Windows'),
-('Carlos',   'Mendoza',           '55551234', 'carlos.mendoza@email.com',    'carlos123',   'CIUDADANO', 'ACTIVO', 'push-token-carlos-001', 'Samsung Galaxy A32', 'Android 13'),
-('María',    'González',          '55554321', 'maria.gonzalez@email.com',    'maria123',    'CIUDADANO', 'ACTIVO', 'push-token-maria-002', 'Xiaomi Redmi Note 11', 'Android 12');
+('Admin',    'Sistema',           '55550001', 'admin@offlineaid.com',        '$2b$10$gNrWd2PBUnLId7/4zyn10.GJ5TVuo/1/RV6J2nVYvTTgZxUwSu9L2', 'ADMIN',     'ACTIVO', NULL, 'Web Console', 'Linux'),
+('Operador', 'Centro de Despacho','55550002', 'operador@offlineaid.com',     '$2b$10$vILk2nJAR9G5b76RtMLSsO.XTJAZ9SVhjDR2jBhNtbv1yN2sjdkki', 'OPERADOR',  'ACTIVO', NULL, 'Web Console', 'Windows'),
+('Carlos',   'Mendoza',           '55551234', 'carlos.mendoza@email.com',    '$2b$10$sEEWumAlcUK.FH8e2ixL8OYAhxaExbdzFK/UV/sbUUk27DFY7dYbK', 'CIUDADANO', 'ACTIVO', 'push-token-carlos-001', 'Samsung Galaxy A32', 'Android 13'),
+('María',    'González',          '55554321', 'maria.gonzalez@email.com',    '$2b$10$p9AucuYbg4KeWFYfX9.54er/18zB/19M6rwXOnFbPQQaBdQzLff/e', 'CIUDADANO', 'ACTIVO', 'push-token-maria-002', 'Xiaomi Redmi Note 11', 'Android 12');

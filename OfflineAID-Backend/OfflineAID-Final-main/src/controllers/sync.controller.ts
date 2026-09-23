@@ -9,7 +9,6 @@ interface OperacionOffline {
   payload: Record<string, any>;
 }
 
-// Protocolos de emergencia precargados para uso offline
 const PROTOCOLOS_DEFAULT = [
   {
     titulo: 'Protocolo ante Terremoto / Sismo',
@@ -39,11 +38,9 @@ const PROTOCOLOS_DEFAULT = [
   },
 ];
 
-// Resuelve si el id de emergencia viene como id temporal de la cola o como id numérico
 const resolverIdEmergencia = (id: any, mapaIds: Record<string, number>): number =>
   typeof id === 'string' && mapaIds[id] ? mapaIds[id] : Number(id);
 
-// Actualiza el estado y mensaje de un registro en ColaOffline
 async function actualizarEstadoCola(idCola: number, estado: 'SINCRONIZADO' | 'ERROR', errorMsg?: string): Promise<void> {
   if (!idCola) return;
   const sql = estado === 'SINCRONIZADO'
@@ -52,7 +49,6 @@ async function actualizarEstadoCola(idCola: number, estado: 'SINCRONIZADO' | 'ER
   await pool.query(sql, estado === 'SINCRONIZADO' ? [idCola] : [errorMsg ?? 'Error desconocido', idCola]);
 }
 
-// Manejadores específicos para cada tipo de operación offline
 const ACCIONES: Record<
   OperacionOffline['tipo_operacion'],
   (payload: Record<string, any>, idUsuario: number, mapaIds: Record<string, number>, tempId?: string) => Promise<{ id_emergencia: number; mensaje: string }>
@@ -133,7 +129,6 @@ const ACCIONES: Record<
   },
 };
 
-// Despacha la operación correspondiente al manejador adecuado
 async function ejecutarOperacion(op: OperacionOffline, idUsuario: number, mapaIds: Record<string, number>) {
   const accion = ACCIONES[op.tipo_operacion];
   if (!accion) throw new Error(`Tipo de operación no soportado: ${op.tipo_operacion}`);

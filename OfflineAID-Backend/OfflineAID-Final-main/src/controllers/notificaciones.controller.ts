@@ -105,7 +105,6 @@ export const notificacionesController = {
         return;
       }
 
-      // Inserción en lote de notificaciones
       const values = usuarios.map((u) => [u.id_usuario, titulo, mensaje, false]);
       await pool.query(
         'INSERT INTO Notificaciones (id_usuario, titulo, mensaje, leida) VALUES ?',

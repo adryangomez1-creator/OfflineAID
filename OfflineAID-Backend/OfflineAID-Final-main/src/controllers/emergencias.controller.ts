@@ -42,7 +42,7 @@ export const emergenciasController = {
 
     try {
       const [usr] = await pool.query<RowDataPacket[]>('SELECT id_usuario FROM Usuarios WHERE id_usuario = ?', [id_usuario]);
-      if (usr.length === 0) {
+      if (usr.length === 0) { 
         res.status(404).json({ error: 'El usuario especificado no existe' });
         return;
       }
@@ -53,7 +53,6 @@ export const emergenciasController = {
         return;
       }
 
-      // Si no viene dirección manual, intentar resolverla mediante geocodificación inversa (OpenStreetMap)
       let direccionFinal = direccion !== undefined && direccion !== null && String(direccion).trim().length > 0
         ? String(direccion).trim().slice(0, 255)
         : null;
@@ -62,7 +61,6 @@ export const emergenciasController = {
         direccionFinal = await obtenerDireccionDesdeCoordenadas(Number(latitud), Number(longitud));
       }
 
-      // 1. Guardar emergencia
       const [emRes] = await pool.query<ResultSetHeader>(
         `INSERT INTO Emergencias (id_usuario, id_tipo, titulo, descripcion, latitud, longitud, direccion, estado)
          VALUES (?, ?, ?, ?, ?, ?, ?, 'PENDIENTE')`,
@@ -70,14 +68,12 @@ export const emergenciasController = {
       );
       const idEmergencia = emRes.insertId;
 
-      // 2. Guardar evidencias si vienen en la petición
       const evidenciasUrls = Array.isArray(evidencias) ? evidencias.filter((u: any) => typeof u === 'string' && u.trim().length > 0) : [];
       if (evidenciasUrls.length > 0) {
         const valores = evidenciasUrls.map((url: string) => [idEmergencia, url.trim()]);
         await pool.query('INSERT INTO Evidencias (id_emergencia, url_imagen) VALUES ?', [valores]);
       }
 
-      // 3. Notificar al usuario
       await pool.query(
         'INSERT INTO Notificaciones (id_usuario, titulo, mensaje) VALUES (?, ?, ?)',
         [id_usuario, 'Emergencia Registrada', `Tu reporte "${titulo}" (Prioridad: ${tip[0].nivel_prioridad}) fue registrado con éxito.`]
@@ -164,12 +160,10 @@ export const emergenciasController = {
       const emergencia = emFilas[0];
       await pool.query('UPDATE Emergencias SET estado = ? WHERE id_emergencia = ?', [estado, idEmergencia]);
 
-      // Si pasa a ATENDIDA, cerrar asignaciones activas
       if (estado === 'ATENDIDA') {
         await pool.query('UPDATE Asignaciones SET estado = "FINALIZADA" WHERE id_emergencia = ? AND estado != "FINALIZADA"', [idEmergencia]);
       }
 
-      // Notificar al usuario
       await pool.query(
         'INSERT INTO Notificaciones (id_usuario, titulo, mensaje) VALUES (?, ?, ?)',
         [emergencia.id_usuario, `Actualización de Emergencia: ${estado}`, `Tu reporte "${emergencia.titulo}" cambió a estado ${estado}.`]

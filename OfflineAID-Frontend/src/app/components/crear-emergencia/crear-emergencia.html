@@ -35,7 +35,6 @@
         <small class="prioridad" [class.critica]="prioridadActual() === 'CRITICA'">Prioridad: {{ prioridadActual() }}</small>
       </div>
 
-      <!-- Título -->
       <div class="mb-3">
         <label class="form-label">Título de la Emergencia</label>
         <input
@@ -57,13 +56,12 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label" for="evidencias">Fotos de evidencia (opcional, máximo 3)</label>
+        <label class="form-label" for="evidencias">Foto de evidencia (opcional)</label>
         <input id="evidencias" #inputEvidencias type="file" class="input-archivo" accept="image/*" multiple (change)="seleccionarEvidencias($event)" />
         <button type="button" class="btn btn-archivo" (click)="inputEvidencias.click()">📎 Seleccionar fotos</button>
         @if (archivos.length) { <small class="d-block mt-1">{{ archivos.length }} foto(s) seleccionada(s).</small> }
       </div>
 
-      <!-- Descripción -->
       <div class="mb-3">
         <label class="form-label">Descripción del Suceso</label>
         <textarea
@@ -79,7 +77,6 @@
         }
       </div>
 
-      <!-- Dirección / Ubicación -->
       <div class="mb-3">
         <label class="form-label">Dirección / Referencia</label>
         <input
@@ -90,7 +87,6 @@
         />
       </div>
 
-      <!-- Botón Enviar -->
       <button type="submit" class="btn btn-danger w-100" [disabled]="formEmergencia.invalid || cargando">
         {{ cargando ? 'Enviando reporte...' : formEmergencia.invalid ? ' Completa el reporte para enviarlo' : 'Reportar Emergencia' }}
       </button>

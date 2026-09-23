@@ -37,7 +37,6 @@ export class CrearEmergenciaComponent {
     { id: 8, nombre: 'Búsqueda y rescate', prioridad: 'ALTA' }
   ];
 
-  // Formulario con validaciones sencillas
   formEmergencia: FormGroup = this.fb.group({
     titulo: ['', [Validators.required, Validators.minLength(5)]],
     descripcion: ['', [Validators.required, Validators.minLength(10)]],

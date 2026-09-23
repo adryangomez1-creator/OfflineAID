@@ -27,7 +27,6 @@
   text-transform: uppercase;
 }
 
-/* Botón principal estilo OfflineAID */
 .btn-danger {
   background: linear-gradient(135deg, #e62249, #b81235) !important;
   border: none !important;

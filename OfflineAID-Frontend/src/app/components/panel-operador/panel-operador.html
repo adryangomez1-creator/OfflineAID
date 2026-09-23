@@ -19,7 +19,6 @@
   </section>
 
   <div class="panel-operador-layout">
-    <!-- Columna Izquierda: Lista de Reportes -->
     <section class="alertas lista-reportes-box">
       <div class="alertas-titulo">
         <p>REPORTES DE EMERGENCIA ACTIVOS</p>
@@ -32,7 +31,7 @@
       <div *ngFor="let item of listaEmergencias" 
            (click)="seleccionarEmergencia(item)"
            class="reporte-item-card"
-           [class.activo]="emergenciaSeleccionada?.id === item.id || emergenciaSeleccionada?.id_local === item.id_local">
+           [class.activo]="emergenciaSeleccionada?.id_emergencia === item.id_emergencia || emergenciaSeleccionada?.id_local === item.id_local">
         
         <div class="reporte-item-header">
           <h3>{{ item.titulo }}</h3>
@@ -45,17 +44,16 @@
         
         <div class="reporte-item-footer">
           <span>📍 {{ item.direccion || 'Ubicación GPS registrada' }}</span>
-          <span>{{ item.fecha || 'Reciente' }}</span>
+          <span>{{ item.fecha_creacion || 'Reciente' }}</span>
         </div>
       </div>
     </section>
 
-    <!-- Columna Derecha: Detalle y Gestión -->
     <section class="detalle-reporte-box">
       <div *ngIf="emergenciaSeleccionada; else sinSeleccion">
         <div class="detalle-titulo-box">
           <h2>Detalle del Reporte</h2>
-          <span class="detalle-id">ID: {{ emergenciaSeleccionada.id || emergenciaSeleccionada.id_local }}</span>
+          <span class="detalle-id">ID: {{ emergenciaSeleccionada.id_emergencia || emergenciaSeleccionada.id_local }}</span>
         </div>
         
         <div class="detalle-contenido">
@@ -76,15 +74,13 @@
           </div>
         </div>
 
-        <!-- Evidencia Fotográfica -->
-        <div class="evidencia-box" *ngIf="emergenciaSeleccionada.imagen || emergenciaSeleccionada.foto">
+        <div class="evidencia-box" *ngIf="emergenciaSeleccionada.evidencias?.length">
           <label>Evidencia Fotográfica:</label>
           <div class="imagen-contenedor">
-            <img [src]="emergenciaSeleccionada.imagen || emergenciaSeleccionada.foto" alt="Evidencia de emergencia">
+            <img [src]="emergenciaSeleccionada.evidencias?.[0]" alt="Evidencia de emergencia">
           </div>
         </div>
 
-        <!-- Botones para Cambiar Estado -->
         <div class="acciones-estado-box">
           <label>Modificar Estado de la Emergencia:</label>
           <div class="grid-botones-estado">

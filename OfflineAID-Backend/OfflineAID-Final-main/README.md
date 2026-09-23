@@ -32,11 +32,7 @@ Sistema de asistencia y respuesta ante emergencias para situaciones sin conexió
    ```
    *O en modo desarrollo:* `pnpm run dev`
 
-  Si la base de datos ya existía antes de esta configuración, convierte las contraseñas almacenadas previamente:
-  ```bash
-  pnpm run migrate-passwords
-  ```
-  Las nuevas cuentas y los datos iniciales se almacenan automáticamente usando hashes bcrypt.
+  Las contraseñas nuevas y los datos iniciales se almacenan automáticamente usando hashes bcrypt.
 
 La API queda disponible en `http://localhost:3000`.
 

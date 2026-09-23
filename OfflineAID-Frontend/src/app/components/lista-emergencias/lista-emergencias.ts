@@ -8,7 +8,7 @@ import { EmergenciaService } from '../../services/emergencia.service';
 @Component({
   selector: 'app-lista-emergencias',
   standalone: true,
-  imports: [CommonModule], // <-- Agregado aquí
+  imports: [CommonModule],
   templateUrl: './lista-emergencias.html',
   styleUrl: './lista-emergencias.css'
 })
@@ -23,7 +23,6 @@ export class ListaEmergenciasComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.cargarEmergencias();
-    // skip(1): evita que BehaviorSubject emita inmediatamente al suscribirse (ya lo manejamos arriba)
     this.cambiosSub = this.emergenciaService.cambios$.pipe(skip(1)).subscribe(() => this.cargarEmergencias());
   }
 
@@ -54,7 +53,6 @@ export class ListaEmergenciasComponent implements OnInit, OnDestroy {
     this.emergenciaService.sincronizarPendientes().subscribe({
       next: (cantidad) => {
         console.log(`✅ Sincronización completada. Se procesaron ${cantidad} reportes pendientes.`);
-        // Una vez sincronizado, volvemos a cargar la lista remota
         this.cargarEmergencias(); 
       },
       error: (err) => {

@@ -8,12 +8,10 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "seed": "tsx src/config/seed.ts",
-    "migrate-passwords": "tsx src/config/migrate-passwords.ts",
     "start": "node dist/src/index.js",
     "test": "tsx --test tests/**/*.test.ts"
   },
   "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/node": "latest",
     "tsx": "latest",

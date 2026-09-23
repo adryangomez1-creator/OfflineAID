@@ -1,10 +1,10 @@
 import { Component, effect, isDevMode, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription, timeout } from 'rxjs'; // <-- Solo un timeout aquí
+import { Subscription, timeout } from 'rxjs';
 import { CrearEmergenciaComponent } from './components/crear-emergencia/crear-emergencia';
 import { NoticiasComponent } from './components/noticias/noticias';
 import { ListaEmergenciasComponent } from './components/lista-emergencias/lista-emergencias';
-import { AuthComponent } from './components/auth/auth'; // <-- Este arregla la línea 16
+import { AuthComponent } from './components/auth/auth';
 import { ConexionService } from './services/conexion.service';
 import { EmergenciaService } from './services/emergencia.service';
 import { AuthService } from './services/auth.service';
@@ -78,15 +78,10 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
-  sincronizarPendientes(): void {
+      sincronizarPendientes(): void {
     if (!this.enLinea || this.sincronizando) return;
     this.sincronizando = true;
     this.emergenciaService.sincronizarPendientes().subscribe({ complete: () => this.sincronizando = false });
   }
 
-  get esPersonalInstitucion(): boolean {
-    const u = this.usuario();
-    if (!u) return false;
-    return u.rol === 'ADMIN' || u.rol === 'OPERATOR' || u.rol === 'OPERADOR';
-  }
 }

@@ -1,4 +1,3 @@
-/* Layout general de dos columnas alineado al estilo de la app */
 .panel-operador-layout {
   display: grid;
   grid-template-columns: 1fr;
@@ -24,7 +23,6 @@
   font-size: 0.875rem;
 }
 
-/* Tarjetas individuales de reporte */
 .reporte-item-card {
   background: #0f172a;
   border: 1px solid #1e293b;
@@ -61,7 +59,6 @@
   margin: 0;
 }
 
-/* Badges de estado */
 .badge-estado {
   font-size: 0.7rem;
   font-weight: 700;
@@ -87,14 +84,12 @@
   color: #86efac;
   border: 1px solid #166534;
 }
-/* Badges de estado en verde para ATENDIDA */
 .badge-estado.atendida {
   background: rgba(20, 83, 45, 0.3);
   color: #86efac;
   border: 1px solid #166534;
 }
 
-/* Botón de Atendida en verde */
 .btn-est.atendida {
   background: rgba(20, 83, 45, 0.2);
   border: 1px solid #166534;
@@ -124,7 +119,6 @@
   padding-top: 0.5rem;
 }
 
-/* Caja de Detalle a la derecha */
 .detalle-reporte-box {
   background: #0f172a;
   border: 1px solid #1e293b;
@@ -199,7 +193,6 @@
   font-family: monospace;
 }
 
-/* Evidencia Fotográfica */
 .evidencia-box {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
@@ -236,7 +229,6 @@
   object-fit: contain;
 }
 
-/* Acciones de Estado */
 .acciones-estado-box {
   border-top: 1px solid #1e293b;
   padding-top: 1.25rem;
@@ -297,7 +289,6 @@
   color: #fff;
 }
 
-/* Estado Vacío */
 .vacio-box {
   background: rgba(15, 23, 42, 0.5);
   border: 1px dashed #1e293b;

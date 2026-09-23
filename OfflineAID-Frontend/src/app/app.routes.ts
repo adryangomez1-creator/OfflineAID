@@ -5,9 +5,9 @@ import { AppComponent } from './app';
 import { adminGuard, usuarioGuard } from './guards/role.guard';
 
 export const routes: Routes = [
-	{ path: '', pathMatch: 'full', redirectTo: 'usuario' },
+	{ path: '', pathMatch: 'full', redirectTo: 'login' },
 	{ path: 'login', component: AuthComponent },
 	{ path: 'usuario', component: AppComponent, canActivate: [usuarioGuard] },
 	{ path: 'admin', component: PanelOperadorComponent, canActivate: [adminGuard] },
-	{ path: '**', redirectTo: 'usuario' }
+	{ path: '**', redirectTo: 'login' }
 ];

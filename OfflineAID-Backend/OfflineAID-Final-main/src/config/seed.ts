@@ -4,7 +4,6 @@ import { pool } from './database.js';
 export async function poblarDatosIniciales() {
   console.log('Verificando y poblando datos iniciales para OfflineAid...');
 
-  // 1. Tipos de Emergencia iniciales
   const [tiposExistentes] = await pool.query('SELECT COUNT(*) as total FROM TiposEmergencia') as any;
   if (tiposExistentes[0].total === 0) {
     const tipos = [
@@ -27,7 +26,6 @@ export async function poblarDatosIniciales() {
     console.log(`✓ ${tipos.length} tipos de emergencia insertados.`);
   }
 
-  // 2. Instituciones de Socorro iniciales
   const [instExistentes] = await pool.query('SELECT COUNT(*) as total FROM Instituciones') as any;
   if (instExistentes[0].total === 0) {
     const instituciones = [
@@ -47,7 +45,6 @@ export async function poblarDatosIniciales() {
     console.log(`✓ ${instituciones.length} instituciones de socorro insertadas.`);
   }
 
-  // 3. Usuarios iniciales (Admin, Operador, Ciudadano)
   const [usuariosExistentes] = await pool.query('SELECT COUNT(*) as total FROM Usuarios') as any;
   if (usuariosExistentes[0].total === 0) {
     const usuarios = [

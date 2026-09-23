@@ -24,10 +24,6 @@ export class EmergenciaService {
     return this.http.get<Emergencia[]>(`${this.apiUrl}/usuario/${idUsuario}`);
   }
 
-  getEmergenciaById(id: number): Observable<Emergencia> {
-    return this.http.get<Emergencia>(`${this.apiUrl}/${id}`);
-  }
-
   crearEmergencia(emergencia: Emergencia): Observable<{ offline: boolean }> {
     const reporteLocal: Emergencia = {
       ...emergencia,
@@ -92,8 +88,6 @@ export class EmergenciaService {
     );
   }
 
-  // Método requerido por el panel de operador para cambiar estados
-// Actualiza este método en tu servicio frontend
   actualizarEstado(id: number | string, estado: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}/estado`, { estado }).pipe(
       tap(() => this.cambios.next())

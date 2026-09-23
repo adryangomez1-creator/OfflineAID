@@ -11,10 +11,6 @@ import newsRoutes from './news.routes.js';
 
 const router: ExpressRouter = Router();
 
-// =========================================================================
-// FASE 3: MÉTODOS ESPECIALES DE NEGOCIO (OfflineAid)
-// (Se registran antes de los CRUDs genéricos para evitar colisión de rutas con :id)
-// =========================================================================
 router.use(syncRoutes);
 router.use(emergenciasRoutes);
 router.use(asignacionesRoutes);
@@ -24,9 +20,6 @@ router.use(authRoutes);
 router.use(ubicacionRoutes);
 router.use(newsRoutes);
 
-// =========================================================================
-// FASE 2: CRUDS BÁSICOS POR ENTIDAD
-// =========================================================================
 function registrarCrud(ruta: string, tabla: string, id: string, columnas: string[]) {
   const crud = crearCrud(tabla, id, columnas);
   router.get(ruta, crud.obtenerTodos);

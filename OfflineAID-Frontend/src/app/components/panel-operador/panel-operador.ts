@@ -46,7 +46,6 @@ export class PanelOperadorComponent implements OnInit {
   actualizarEstado(nuevoEstado: EstadoEmergencia): void {
     if (!this.emergenciaSeleccionada) return;
 
-    // Buscamos todas las posibles variantes de la llave primaria que pueda enviar el backend
     const id = this.emergenciaSeleccionada.id_emergencia || this.emergenciaSeleccionada.id_local;
 
     if (!id) {

@@ -24,8 +24,7 @@ export interface RegistroUsuario {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly claveSesion = 'offlineaid.usuario';
-  readonly usuario = signal<UsuarioSesion | null>(this.leerSesion());
+  readonly usuario = signal<UsuarioSesion | null>(null);
 
   registrar(datos: RegistroUsuario): Observable<{ usuario: UsuarioSesion }> {
     return this.http.post<{ usuario: UsuarioSesion }>('/api/auth/registro', datos).pipe(tap(respuesta => this.guardarSesion(respuesta.usuario)));
@@ -36,18 +35,12 @@ export class AuthService {
   }
 
   cerrarSesion(): void {
-    localStorage.removeItem(this.claveSesion);
     this.usuario.set(null);
   }
 
   usuarioActual(): UsuarioSesion | null { return this.usuario(); }
 
   private guardarSesion(usuario: UsuarioSesion): void {
-    localStorage.setItem(this.claveSesion, JSON.stringify(usuario));
     this.usuario.set(usuario);
-  }
-
-  private leerSesion(): UsuarioSesion | null {
-    try { return JSON.parse(localStorage.getItem(this.claveSesion) ?? 'null'); } catch { return null; }
   }
 }

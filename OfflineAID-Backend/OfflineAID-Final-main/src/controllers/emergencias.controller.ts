@@ -33,10 +33,11 @@ export const emergenciasController = {
    * Si no se envía dirección pero sí coordenadas (como en SOS), se resuelve automáticamente con OpenStreetMap.
    */
   reportarEmergencia: async (req: Request, res: Response): Promise<void> => {
-    const { id_usuario, id_tipo, titulo, descripcion, latitud, longitud, direccion, evidencias } = req.body;
+    const id_usuario = req.authUser!.id_usuario;
+    const { id_tipo, titulo, descripcion, latitud, longitud, direccion, evidencias } = req.body;
 
-    if (!id_usuario || !id_tipo || !titulo || !descripcion) {
-      res.status(400).json({ error: 'Los campos id_usuario, id_tipo, titulo y descripcion son obligatorios' });
+    if (!id_tipo || !titulo || !descripcion) {
+      res.status(400).json({ error: 'Los campos id_tipo, titulo y descripcion son obligatorios' });
       return;
     }
 
@@ -291,7 +292,7 @@ export const emergenciasController = {
    * Historial de emergencias de un usuario en particular.
    */
   obtenerEmergenciasPorUsuario: async (req: Request, res: Response): Promise<void> => {
-    const idUsuario = Number(req.params.id_usuario);
+    const idUsuario = req.authUser!.id_usuario;
 
     try {
       const [filas] = await pool.query<RowDataPacket[]>(

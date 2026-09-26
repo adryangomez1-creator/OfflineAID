@@ -16,7 +16,9 @@ Sistema de asistencia y respuesta ante emergencias para situaciones sin conexió
    DB_USER=root
    DB_PASSWORD=tu_password
    DB_NAME=offlineaid_in5bm
+  JWT_SECRET=una_clave_aleatoria_segura_de_al_menos_32_bytes
    ```
+  Genera una clave con `node -e "console.log(require('node:crypto').randomBytes(48).toString('hex'))"`. No compartas ni subas el `.env` al repositorio.
 3. Instala dependencias:
    ```bash
    pnpm install
@@ -36,6 +38,18 @@ Sistema de asistencia y respuesta ante emergencias para situaciones sin conexió
 
 La API queda disponible en `http://localhost:3000`.
 
+### Acceso actual
+
+El login y el registro son públicos y entregan un JWT con vigencia de 2 horas. El registro siempre crea ciudadanos. Los usuarios `ADMIN` se asignan directamente en SQL. Envía el token en `Authorization: Bearer <token>` para usar rutas protegidas.
+
+| Rol | Rutas habilitadas |
+|---|---|
+| `CIUDADANO` | `POST /api/emergencias/reportar`, `GET /api/emergencias/usuario/:id_usuario`, `POST /api/sync/batch`, `POST /api/ubicacion/geocodificar` |
+| `ADMIN` | `GET /api/emergencias`, `PUT` o `PATCH /api/emergencias/:id/estado` |
+| Público | `POST /api/auth/registro`, `POST /api/auth/login`, `GET /api/news`, `GET /` |
+
+Las demás rutas API no están habilitadas en esta versión. El ID de ciudadano se toma del JWT en reportes, historial y sincronización; el ID enviado por el cliente no define la identidad.
+
 ---
 
 ## Fases del Proyecto
@@ -46,7 +60,11 @@ La API queda disponible en `http://localhost:3000`.
 
 ---
 
-## Endpoints de la Fase 3 (Métodos Especiales)
+## Endpoints heredados no habilitados
+
+Las tablas siguientes describen funcionalidades de fases anteriores. Esas rutas no están montadas en la API actual; consulta la matriz de acceso anterior para los endpoints disponibles.
+
+### Endpoints de la Fase 3 (Métodos Especiales)
 
 ### 1. Sincronización Offline (`/api/sync` y `/api/cola-offline`)
 

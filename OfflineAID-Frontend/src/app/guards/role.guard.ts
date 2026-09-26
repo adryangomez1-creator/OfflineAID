@@ -21,7 +21,7 @@ export const loginGuard: CanActivateFn = () => {
 
   return usuario.rol === 'CIUDADANO'
     ? router.createUrlTree(['/usuario'])
-    : usuario.rol === 'ADMIN' || usuario.rol === 'OPERATOR' || usuario.rol === 'OPERADOR'
+    : usuario.rol === 'ADMIN'
       ? router.createUrlTree(['/admin'])
       : true;
 };
@@ -31,7 +31,7 @@ export const adminGuard: CanActivateFn = () => {
   const router = inject(Router);
   const usuario = auth.usuarioActual();
 
-  return usuario?.rol === 'ADMIN' || usuario?.rol === 'OPERATOR' || usuario?.rol === 'OPERADOR'
+  return usuario?.rol === 'ADMIN'
     ? true
     : router.createUrlTree(['/login']);
 };

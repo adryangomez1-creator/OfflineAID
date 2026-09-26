@@ -64,6 +64,6 @@ export class AuthComponent {
   }
 
   private esPersonalInstitucional(rol: string): boolean {
-    return rol === 'ADMIN' || rol === 'OPERATOR' || rol === 'OPERADOR';
+    return rol === 'ADMIN';
   }
 }

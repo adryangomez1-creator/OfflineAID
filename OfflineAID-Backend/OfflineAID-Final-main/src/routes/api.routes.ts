@@ -1,41 +1,29 @@
 import { Router, type Router as ExpressRouter } from 'express';
-import { crearCrud } from '../controllers/crud.controller.js';
-import syncRoutes from './sync.routes.js';
-import emergenciasRoutes from './emergencias.routes.js';
-import asignacionesRoutes from './asignaciones.routes.js';
-import notificacionesRoutes from './notificaciones.routes.js';
-import estadisticasRoutes from './estadisticas.routes.js';
+import { emergenciasController } from '../controllers/emergencias.controller.js';
+import { syncController } from '../controllers/sync.controller.js';
+import { ubicacionController } from '../controllers/ubicacion.controller.js';
+import { autenticar, permitirRoles } from '../middleware/auth.middleware.js';
 import authRoutes from './auth.routes.js';
-import ubicacionRoutes from './ubicacion.routes.js';
 import newsRoutes from './news.routes.js';
 
 const router: ExpressRouter = Router();
 
-router.use(syncRoutes);
-router.use(emergenciasRoutes);
-router.use(asignacionesRoutes);
-router.use(notificacionesRoutes);
-router.use(estadisticasRoutes);
 router.use(authRoutes);
-router.use(ubicacionRoutes);
 router.use(newsRoutes);
 
-function registrarCrud(ruta: string, tabla: string, id: string, columnas: string[]) {
-  const crud = crearCrud(tabla, id, columnas);
-  router.get(ruta, crud.obtenerTodos);
-  router.get(`${ruta}/:id`, crud.obtenerPorId);
-  router.post(ruta, crud.crear);
-  router.put(`${ruta}/:id`, crud.actualizar);
-  router.delete(`${ruta}/:id`, crud.eliminar);
-}
+router.use(autenticar);
 
-registrarCrud('/usuarios', 'Usuarios', 'id_usuario', ['nombre', 'apellido', 'telefono', 'correo', 'rol', 'estado', 'token_push', 'modelo_dispositivo', 'sistema_operativo']);
-registrarCrud('/tipos-emergencia', 'TiposEmergencia', 'id_tipo', ['nombre', 'descripcion', 'nivel_prioridad']);
-registrarCrud('/emergencias', 'Emergencias', 'id_emergencia', ['id_usuario', 'id_tipo', 'titulo', 'descripcion', 'latitud', 'longitud', 'direccion', 'estado']);
-registrarCrud('/evidencias', 'Evidencias', 'id_evidencia', ['id_emergencia', 'url_imagen']);
-registrarCrud('/instituciones', 'Instituciones', 'id_institucion', ['nombre', 'tipo', 'telefono', 'correo', 'direccion']);
-registrarCrud('/asignaciones', 'Asignaciones', 'id_asignacion', ['id_emergencia', 'id_institucion', 'estado']);
-registrarCrud('/notificaciones', 'Notificaciones', 'id_notificacion', ['id_usuario', 'titulo', 'mensaje', 'leida']);
-registrarCrud('/cola-offline', 'ColaOffline', 'id_cola', ['id_usuario', 'tipo_operacion', 'payload_json', 'estado_sync', 'mensaje_error', 'fecha_sync']);
+router.post('/emergencias/reportar', permitirRoles('CIUDADANO'), emergenciasController.reportarEmergencia);
+router.get('/emergencias/usuario/:id_usuario', permitirRoles('CIUDADANO'), emergenciasController.obtenerEmergenciasPorUsuario);
+router.post('/sync/batch', permitirRoles('CIUDADANO'), syncController.sincronizarLote);
+router.post('/ubicacion/geocodificar', permitirRoles('CIUDADANO'), ubicacionController.geocodificar);
+
+router.get('/emergencias', permitirRoles('ADMIN'), emergenciasController.obtenerEmergenciasConEvidencias);
+router.put('/emergencias/:id/estado', permitirRoles('ADMIN'), emergenciasController.cambiarEstado);
+router.patch('/emergencias/:id/estado', permitirRoles('ADMIN'), emergenciasController.cambiarEstado);
+
+router.use((_req, res) => {
+  res.status(403).json({ error: 'Esta ruta no está habilitada' });
+});
 
 export default router;

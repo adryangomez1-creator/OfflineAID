@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { pool } from '../config/database.js';
+import { crearToken } from '../middleware/auth.middleware.js';
 
 type UsuarioPublico = Omit<RowDataPacket, 'password'>;
 
@@ -40,7 +41,9 @@ export const authController = {
         ]
       );
       const [usuarios] = await pool.query<RowDataPacket[]>('SELECT * FROM Usuarios WHERE id_usuario = ?', [resultado.insertId]);
-      res.status(201).json({ mensaje: 'Cuenta creada correctamente', usuario: usuarioSeguro(usuarios[0]) });
+      const usuario = usuarioSeguro(usuarios[0]);
+      const token = crearToken(usuario.id_usuario, 'CIUDADANO');
+      res.status(201).json({ mensaje: 'Cuenta creada correctamente', usuario, token });
     } catch (error: unknown) {
       console.error('Error al registrar usuario:', error);
       res.status(500).json({ error: 'No se pudo crear la cuenta' });
@@ -66,7 +69,13 @@ export const authController = {
         res.status(403).json({ error: 'Esta cuenta está inactiva' });
         return;
       }
-      res.json({ mensaje: 'Inicio de sesión correcto', usuario: usuarioSeguro(usuarios[0]) });
+      if (!['ADMIN', 'CIUDADANO'].includes(usuarios[0].rol)) {
+        res.status(403).json({ error: 'Este rol no tiene una vista habilitada' });
+        return;
+      }
+      const usuario = usuarioSeguro(usuarios[0]);
+      const token = crearToken(usuario.id_usuario, usuario.rol);
+      res.json({ mensaje: 'Inicio de sesión correcto', usuario, token });
     } catch (error: unknown) {
       console.error('Error al iniciar sesión:', error);
       res.status(500).json({ error: 'No se pudo iniciar sesión' });

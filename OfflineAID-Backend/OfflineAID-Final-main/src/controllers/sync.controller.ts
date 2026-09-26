@@ -140,19 +140,13 @@ export const syncController = {
    * Sincronización masiva automática cuando el dispositivo recupera conexión.
    */
   sincronizarLote: async (req: Request, res: Response): Promise<void> => {
-    const { id_usuario, operaciones } = req.body as {
-      id_usuario?: number;
+    const id_usuario = req.authUser!.id_usuario;
+    const { operaciones } = req.body as {
       operaciones?: OperacionOffline[];
     };
 
-    if (!id_usuario || !Array.isArray(operaciones) || operaciones.length === 0) {
-      res.status(400).json({ error: 'Debe proporcionar un "id_usuario" válido y un arreglo de "operaciones"' });
-      return;
-    }
-
-    const [usuarios] = await pool.query<RowDataPacket[]>('SELECT id_usuario FROM Usuarios WHERE id_usuario = ?', [id_usuario]);
-    if (usuarios.length === 0) {
-      res.status(404).json({ error: 'El usuario especificado no existe' });
+    if (!Array.isArray(operaciones) || operaciones.length === 0) {
+      res.status(400).json({ error: 'Debe proporcionar un arreglo de "operaciones"' });
       return;
     }
 

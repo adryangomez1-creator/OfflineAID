@@ -1,59 +1,41 @@
-# OfflineAIDFrontend
+# OfflineAID Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.4.
+Aplicación web Angular para reportar emergencias como ciudadano y gestionarlas desde el panel `ADMIN`. El frontend principal de este repositorio es esta carpeta `OfflineAID-Frontend` (la que contiene este README y `src/app`).
 
-## Development server
+## Requisitos
 
-To start a local development server, run:
+- Node.js y pnpm.
+- Backend OfflineAID ejecutándose en `http://localhost:3000` y configurado con su `.env`.
 
-```bash
-ng serve
+## Desarrollo local
+
+Desde esta carpeta:
+
+```powershell
+pnpm install
+pnpm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abre `http://localhost:4200`. El servidor de desarrollo usa `proxy.conf.json` para reenviar las peticiones `/api` al backend en `http://localhost:3000`.
 
-## Code scaffolding
+## Vistas y roles
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- `CIUDADANO`: reporta emergencias, consulta su historial y sincroniza reportes pendientes al recuperar conexión.
+- `ADMIN`: abre el panel para consultar los reportes y cambiar sus estados.
 
-```bash
-ng generate component component-name
+El registro público crea solo cuentas de ciudadano. Las cuentas `ADMIN` se preparan directamente en la base de datos. Otros roles definidos por el esquema no tienen una vista habilitada actualmente.
+
+## Sesión JWT
+
+Al iniciar sesión o registrarse, el backend devuelve un JWT con expiración de 2 horas. `AuthService` guarda el usuario y el token en `localStorage`; el interceptor agrega `Authorization: Bearer <token>` a las llamadas de API, excepto login y registro. Al cerrar sesión se eliminan ambos valores. Si una ruta devuelve `401`, Angular limpia la sesión y vuelve a `/login`.
+
+El token guardado en `localStorage` puede ser leído por JavaScript. No compartas su valor ni capturas legibles del encabezado `Authorization`.
+
+## Verificación
+
+```powershell
+pnpm build
+pnpm test
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+`pnpm test` ejecuta las pruebas unitarias Angular configuradas por el CLI.

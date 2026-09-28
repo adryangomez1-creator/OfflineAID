@@ -21,9 +21,9 @@ Abre `http://localhost:4200`. El servidor de desarrollo usa `proxy.conf.json` pa
 ## Vistas y roles
 
 - `CIUDADANO`: reporta emergencias, consulta su historial y sincroniza reportes pendientes al recuperar conexión.
-- `ADMIN`: abre el panel para consultar los reportes y cambiar sus estados.
+- `ADMIN` y `OPERADOR`: abren el panel para consultar los reportes y cambiar sus estados.
 
-El registro público crea solo cuentas de ciudadano. Las cuentas `ADMIN` se preparan directamente en la base de datos. Otros roles definidos por el esquema no tienen una vista habilitada actualmente.
+El registro público crea solo cuentas de ciudadano. Las cuentas de personal se preparan mediante el seed o directamente en la base de datos. Otros roles definidos por el esquema, como `INSTITUCION`, no tienen una vista habilitada actualmente.
 
 ## Sesión JWT
 

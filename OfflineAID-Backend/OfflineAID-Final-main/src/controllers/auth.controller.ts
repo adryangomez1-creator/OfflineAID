@@ -69,7 +69,7 @@ export const authController = {
         res.status(403).json({ error: 'Esta cuenta está inactiva' });
         return;
       }
-      if (!['ADMIN', 'CIUDADANO'].includes(usuarios[0].rol)) {
+      if (!['ADMIN', 'OPERADOR', 'CIUDADANO'].includes(usuarios[0].rol)) {
         res.status(403).json({ error: 'Este rol no tiene una vista habilitada' });
         return;
       }

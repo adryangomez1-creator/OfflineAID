@@ -15,4 +15,4 @@ La carpeta `OfflineAID-Frontend/Frontend` contiene un scaffold Angular SSR separ
 2. En otra terminal, entra a `OfflineAID-Frontend` y ejecuta `pnpm install` y `pnpm start`.
 3. Abre `http://localhost:4200`.
 
-El proxy de Angular reenvía `/api` al backend local en el puerto `3000`. La aplicación tiene una vista ciudadana y un panel `ADMIN`; las cuentas ciudadanas se registran desde la app y las cuentas `ADMIN` se preparan desde SQL.
+El proxy de Angular reenvía `/api` al backend local en el puerto `3000`. La aplicación tiene una vista ciudadana y un panel de gestión para `ADMIN` y `OPERADOR`; las cuentas ciudadanas se registran desde la app y las cuentas de personal se preparan desde SQL o el seed.

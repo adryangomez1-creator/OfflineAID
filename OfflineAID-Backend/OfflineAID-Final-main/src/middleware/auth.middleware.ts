@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 
-export type RolAplicacion = 'ADMIN' | 'CIUDADANO';
+export type RolAplicacion = 'ADMIN' | 'OPERADOR' | 'CIUDADANO';
 
 function obtenerSecreto(): string {
   const secret = process.env.JWT_SECRET;
@@ -41,7 +41,7 @@ export function autenticar(req: Request, res: Response, next: NextFunction): voi
   try {
     const payload = jwt.verify(token, secret) as JwtPayload;
     const idUsuario = Number(payload.sub);
-    if (!Number.isInteger(idUsuario) || idUsuario <= 0 || !['ADMIN', 'CIUDADANO'].includes(payload.rol)) {
+    if (!Number.isInteger(idUsuario) || idUsuario <= 0 || !['ADMIN', 'OPERADOR', 'CIUDADANO'].includes(payload.rol)) {
       res.status(401).json({ error: 'Token de acceso inválido' });
       return;
     }

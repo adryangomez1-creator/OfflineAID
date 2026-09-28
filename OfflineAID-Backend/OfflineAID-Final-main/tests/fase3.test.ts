@@ -11,6 +11,7 @@ process.env.JWT_SECRET ??= 'offlineaid-test-secret-at-least-32-bytes-long';
 let server: Server;
 let baseUrl: string;
 let adminToken: string;
+let operatorToken: string;
 let citizenToken: string;
 let adminId: number;
 let citizenId: number;
@@ -43,8 +44,10 @@ before(async () => {
   });
 
   const admin = await iniciarSesion('admin@offlineaid.com', 'admin123');
+  const operator = await iniciarSesion('operador@offlineaid.com', 'operador123');
   const citizen = await iniciarSesion('carlos.mendoza@email.com', 'carlos123');
   adminToken = admin.token;
+  operatorToken = operator.token;
   adminId = admin.id;
   citizenToken = citizen.token;
   citizenId = citizen.id;
@@ -99,16 +102,25 @@ test('el ciudadano solo consulta su historial y el servidor toma su identidad de
   ));
 });
 
-test('ADMIN puede consultar reportes y cambiar su estado', async () => {
+test('ADMIN y OPERADOR pueden consultar reportes y cambiar su estado', async () => {
   const lista = await api('/emergencias', adminToken);
   assert.equal(lista.status, 200);
   const emergencias = await lista.json();
   const propia = emergencias.find((item: { id_usuario: number }) => item.id_usuario === citizenId);
   assert.ok(propia);
 
-  const cambio = await api(`/emergencias/${propia.id_emergencia}/estado`, adminToken, {
+  const listaOperador = await api('/emergencias', operatorToken);
+  assert.equal(listaOperador.status, 200);
+
+  const cambioAdmin = await api(`/emergencias/${propia.id_emergencia}/estado`, adminToken, {
     method: 'PUT',
     body: JSON.stringify({ estado: 'EN_PROCESO' }),
+  });
+  assert.equal(cambioAdmin.status, 200);
+
+  const cambio = await api(`/emergencias/${propia.id_emergencia}/estado`, operatorToken, {
+    method: 'PUT',
+    body: JSON.stringify({ estado: 'ATENDIDA' }),
   });
   assert.equal(cambio.status, 200);
 

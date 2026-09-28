@@ -18,9 +18,9 @@ router.get('/emergencias/usuario/:id_usuario', permitirRoles('CIUDADANO'), emerg
 router.post('/sync/batch', permitirRoles('CIUDADANO'), syncController.sincronizarLote);
 router.post('/ubicacion/geocodificar', permitirRoles('CIUDADANO'), ubicacionController.geocodificar);
 
-router.get('/emergencias', permitirRoles('ADMIN'), emergenciasController.obtenerEmergenciasConEvidencias);
-router.put('/emergencias/:id/estado', permitirRoles('ADMIN'), emergenciasController.cambiarEstado);
-router.patch('/emergencias/:id/estado', permitirRoles('ADMIN'), emergenciasController.cambiarEstado);
+router.get('/emergencias', permitirRoles('ADMIN', 'OPERADOR'), emergenciasController.obtenerEmergenciasConEvidencias);
+router.put('/emergencias/:id/estado', permitirRoles('ADMIN', 'OPERADOR'), emergenciasController.cambiarEstado);
+router.patch('/emergencias/:id/estado', permitirRoles('ADMIN', 'OPERADOR'), emergenciasController.cambiarEstado);
 
 router.use((_req, res) => {
   res.status(403).json({ error: 'Esta ruta no está habilitada' });
